@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="16dp">
+
+    <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="?textAppearanceHeadline5"
+            app:fontFamily="@font/vollkorn"
+            android:text="My day in a short review"
+            android:textSize="18sp"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/title"
+            app:layout_constraintBottom_toBottomOf="@id/title"
+            app:layout_constraintRight_toRightOf="parent"
+            android:textAllCaps="true"
+            style="?textAppearanceCaption"
+            app:fontFamily="@font/libre_baskerville"
+            android:textSize="10sp"
+            android:text="1h ago"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Today's pretty good I feel like I am jumping with joy hmmm I do really like cookies."
+            style="?textAppearanceCaption"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/time"
+            app:layout_constraintTop_toBottomOf="@id/title"
+            android:lineSpacingMultiplier="1.2"
+            android:maxLines="2"
+            android:paddingTop="8dp"
+            android:paddingBottom="24dp"
+            app:fontFamily="@font/libre_baskerville"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
