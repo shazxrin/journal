@@ -1,6 +1,7 @@
 package io.github.icedshytea.journal.feature.editor
 
 import android.content.Context
+import android.content.DialogInterface
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.*
@@ -12,6 +13,7 @@ import androidx.navigation.fragment.navArgs
 import io.github.icedshytea.journal.R
 import io.github.icedshytea.journal.databinding.FragmentEditorBinding
 import io.github.icedshytea.journal.feature.MainFragment
+import io.github.icedshytea.journal.utils.alert.BottomAlertDialogFragment
 import kotlinx.android.synthetic.main.fragment_editor.*
 
 class EditorFragment : MainFragment() {
@@ -105,10 +107,26 @@ class EditorFragment : MainFragment() {
         }
     }
 
+    private fun handleDeleteOptionItemSelected() {
+        BottomAlertDialogFragment(
+            "Are you sure you want to delete?",
+            "Yes",
+            "No",
+            DialogInterface.OnClickListener { dialog, id ->
+                when (id) {
+                    R.id.positive_button -> editorViewModel.delete()
+                    R.id.negative_button -> dialog.cancel()
+                }
+            }
+        ).show(childFragmentManager, "DeleteBottomAlertDialogFragment")
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.save -> editorViewModel.save()
-            R.id.delete -> editorViewModel.delete()
+            R.id.delete -> {
+                handleDeleteOptionItemSelected()
+            }
             R.id.edit -> {
                 if (isViewingMode) {
                     isViewingMode = false
