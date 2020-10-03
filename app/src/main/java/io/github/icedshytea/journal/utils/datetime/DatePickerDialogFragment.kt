@@ -12,7 +12,7 @@ class DatePickerDialogFragment(
 ) : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         // Java's Calendar API's months start from 0 so we need to +- accordingly with 310's months.
-        val datePickerDialog = DatePickerDialog(context, onDateSetListener, selectedDate.year, selectedDate.monthValue - 1, selectedDate.dayOfMonth)
+        val datePickerDialog = DatePickerDialog(context, onDateSetListener, selectedDate.year, selectedDate.monthValue, selectedDate.dayOfMonth)
         datePickerDialog.datePicker.maxDate = ZonedDateTime.now(ZoneId.systemDefault())
             .toEpochSecond() * 1000L
         datePickerDialog.datePicker

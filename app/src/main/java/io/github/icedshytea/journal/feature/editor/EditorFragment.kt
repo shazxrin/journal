@@ -1,22 +1,32 @@
 package io.github.icedshytea.journal.feature.editor
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
+import android.widget.DatePicker
+import android.widget.TimePicker
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.chip.Chip
+import com.google.android.material.datepicker.MaterialDatePicker
 import io.github.icedshytea.journal.R
 import io.github.icedshytea.journal.databinding.FragmentEditorBinding
 import io.github.icedshytea.journal.feature.MainFragment
 import io.github.icedshytea.journal.utils.alert.BottomAlertDialogFragment
+import io.github.icedshytea.journal.utils.datetime.DatePickerDialogFragment
+import io.github.icedshytea.journal.utils.datetime.TimePickerDialogFragment
 import kotlinx.android.synthetic.main.fragment_editor.*
 
-class EditorFragment : MainFragment() {
+class EditorFragment : MainFragment(),
+    DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener
+{
     private lateinit var editorViewModel: EditorViewModel
 
     private val args: EditorFragmentArgs by navArgs()
@@ -84,6 +94,7 @@ class EditorFragment : MainFragment() {
 
         setupBottomAppBar()
 
+        // Setup viewing mode.
         if (isViewingMode) {
             disableFields()
         }
@@ -92,7 +103,38 @@ class EditorFragment : MainFragment() {
 
             showSoftKeyboard()
         }
+
+        // Setup date & time chips.
+        view.findViewById<Chip>(R.id.date).setOnClickListener { handleDateChipSelected() }
+        view.findViewById<Chip>(R.id.time).setOnClickListener { handleTimeChipSelected() }
     }
+
+    //region  Date & Time chips handling
+    private fun handleDateChipSelected() {
+        val datePicker = DatePickerDialogFragment(this, editorViewModel.dateTimeField.value!!.toLocalDate())
+        datePicker.show(childFragmentManager, "DatePickerDialogFragment")
+    }
+
+    private fun handleTimeChipSelected() {
+        // TODO: LiveField's guarantees that value will never be null since it is init on creation. Need to fix LiveField API.
+        val timePicker = TimePickerDialogFragment(this, editorViewModel.dateTimeField.value!!.toLocalTime())
+        timePicker.show(childFragmentManager, "TimePickerDialogFragment")
+    }
+
+    override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+        val oldDateTime = editorViewModel.dateTimeField.value!!
+        // Java's Calendar API's months start from 0 so we need to +- accordingly with 310's months.
+        val newDateTime = oldDateTime.withDayOfMonth(dayOfMonth).withMonth(month + 1).withYear(year);
+
+        editorViewModel.dateTimeField.postValue(newDateTime)
+    }
+    override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
+        val oldDateTime = editorViewModel.dateTimeField.value!!
+        val newDateTime = oldDateTime.withHour(hourOfDay).withMinute(minute)
+
+        editorViewModel.dateTimeField.postValue(newDateTime)
+    }
+    //endregion
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
