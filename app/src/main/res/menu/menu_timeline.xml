@@ -3,7 +3,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
             android:id="@+id/datePicker"
-            android:icon="@drawable/ic_date"
+            android:icon="@drawable/ic_date_range"
             app:iconTint="?attr/colorOnSurface"
             android:title="Go to Date"
             app:showAsAction="always">

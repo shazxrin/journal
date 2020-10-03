@@ -35,14 +35,41 @@
                     android:textStyle="bold"
                     app:fontFamily="@font/vollkorn" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/dateTime"
-                    style="?textAppearanceCaption"
-                    android:layout_width="match_parent"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="@{DateTimeHelper.format(viewModel.dateTimeField)}"
-                    app:fontFamily="@font/libre_baskerville" />
+                    android:orientation="horizontal">
+
+                <com.google.android.material.chip.Chip
+                        android:id="@+id/date"
+                        style="@style/Widget.App.Chip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:text="@{DateTimeHelper.formatDate(viewModel.dateTimeField)}"
+                        app:fontFamily="@font/libre_baskerville"
+                        app:chipIcon="@drawable/ic_date"
+                        app:iconStartPadding="4dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/time"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.chip.Chip
+                        android:id="@+id/time"
+                        style="@style/Widget.App.Chip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{DateTimeHelper.formatTime(viewModel.dateTimeField)}"
+                        app:fontFamily="@font/libre_baskerville"
+                        app:chipIcon="@drawable/ic_time"
+                        app:iconStartPadding="4dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/date"
+                        app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/content"
