@@ -24,6 +24,7 @@
         android:layout_height="wrap_content"
         android:text="Positive"
         style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:textColor="?attr/colorOnBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginEnd="8dp"
