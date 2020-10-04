@@ -1,5 +1,6 @@
 package io.github.icedshytea.journal.feature.editor
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.icedshytea.journal.common.data.ActionResult
@@ -16,13 +17,19 @@ import javax.inject.Inject
 class EditorViewModel @Inject constructor(private val entryRepository: EntryRepository) : ViewModel() {
     private var currentEntryId: Int? = null
 
+    // Flags
+    var isViewingMode = false
+
     // Fields.
     val titleField = LiveField("")
     val contentField = LiveField("")
     val dateTimeField = LiveField(LocalDateTime.now())
 
-    // Actions & results.
+    // Results.
     val saveActionResult = LiveActionResult()
+    val loadActionResult = LiveActionResult()
+    val deleteActionResult = LiveActionResult()
+
     fun save() {
         val entry = Entry(
             currentEntryId ?: 0,
@@ -48,7 +55,6 @@ class EditorViewModel @Inject constructor(private val entryRepository: EntryRepo
         }
     }
 
-    val loadActionResult = LiveActionResult()
     fun load(entryId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -67,7 +73,6 @@ class EditorViewModel @Inject constructor(private val entryRepository: EntryRepo
         }
     }
 
-    val deleteActionResult = LiveActionResult()
     fun delete() {
         val entryToDeleteId = currentEntryId ?: return
 
