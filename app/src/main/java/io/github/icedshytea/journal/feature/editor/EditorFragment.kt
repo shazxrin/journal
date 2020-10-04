@@ -6,16 +6,17 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.DatePicker
 import android.widget.TimePicker
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.chip.Chip
-import com.google.android.material.datepicker.MaterialDatePicker
 import io.github.icedshytea.journal.R
 import io.github.icedshytea.journal.databinding.FragmentEditorBinding
 import io.github.icedshytea.journal.feature.MainFragment
@@ -30,7 +31,6 @@ class EditorFragment : MainFragment(),
     private lateinit var editorViewModel: EditorViewModel
 
     private val args: EditorFragmentArgs by navArgs()
-    private var isViewingMode = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,12 +38,37 @@ class EditorFragment : MainFragment(),
         setHasOptionsMenu(true)
 
         editorViewModel = initViewModel()
-        isViewingMode = args.entryId != -1
+        editorViewModel.isViewingMode = args.entryId != -1
 
         // Load entry by id (view mode).
-        if (isViewingMode) {
+        if (editorViewModel.isViewingMode) {
             editorViewModel.load(args.entryId)
         }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        requireActivity().onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (!editorViewModel.isViewingMode) {
+                    BottomAlertDialogFragment(
+                        "Do you want to save or discard changes?",
+                        "Save",
+                        "Discard",
+                        DialogInterface.OnClickListener { _, id ->
+                            when (id) {
+                                R.id.positive_button -> editorViewModel.save()
+                                R.id.negative_button -> findNavController().navigateUp()
+                            }
+                        }
+                    ).show(childFragmentManager, "SaveBottomAlertDialogFragment")
+                }
+                else {
+                    findNavController().navigateUp()
+                }
+            }
+        })
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -95,7 +120,7 @@ class EditorFragment : MainFragment(),
         setupBottomAppBar()
 
         // Setup viewing mode.
-        if (isViewingMode) {
+        if (editorViewModel.isViewingMode) {
             disableFields()
         }
         else {
@@ -105,11 +130,11 @@ class EditorFragment : MainFragment(),
         }
 
         // Setup date & time chips.
-        view.findViewById<Chip>(R.id.date).setOnClickListener { handleDateChipSelected() }
-        view.findViewById<Chip>(R.id.time).setOnClickListener { handleTimeChipSelected() }
+        date.setOnClickListener { handleDateChipSelected() }
+        time.setOnClickListener { handleTimeChipSelected() }
     }
 
-    //region  Date & Time chips handling
+    //region Date & Time chips handling
     private fun handleDateChipSelected() {
         val datePicker = DatePickerDialogFragment(this, editorViewModel.dateTimeField.value!!.toLocalDate())
         datePicker.show(childFragmentManager, "DatePickerDialogFragment")
@@ -128,6 +153,7 @@ class EditorFragment : MainFragment(),
 
         editorViewModel.dateTimeField.postValue(newDateTime)
     }
+
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
         val oldDateTime = editorViewModel.dateTimeField.value!!
         val newDateTime = oldDateTime.withHour(hourOfDay).withMinute(minute)
@@ -141,7 +167,7 @@ class EditorFragment : MainFragment(),
 
         menu.clear()
 
-        if (isViewingMode) {
+        if (editorViewModel.isViewingMode) {
             inflater.inflate(R.menu.menu_editor_viewer, menu)
         }
         else {
@@ -170,8 +196,8 @@ class EditorFragment : MainFragment(),
                 handleDeleteOptionItemSelected()
             }
             R.id.edit -> {
-                if (isViewingMode) {
-                    isViewingMode = false
+                if (editorViewModel.isViewingMode) {
+                    editorViewModel.isViewingMode = false
 
                     enableFields()
 
@@ -185,7 +211,7 @@ class EditorFragment : MainFragment(),
                 }
             }
             android.R.id.home -> {
-                if (!isViewingMode) hideSoftKeyboard()
+                if (!editorViewModel.isViewingMode) hideSoftKeyboard()
 
                 activity?.onBackPressed()
             }
