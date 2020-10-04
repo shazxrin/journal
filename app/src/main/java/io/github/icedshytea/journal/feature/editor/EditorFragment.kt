@@ -132,6 +132,18 @@ class EditorFragment : MainFragment(),
         // Setup date & time chips.
         date.setOnClickListener { handleDateChipSelected() }
         time.setOnClickListener { handleTimeChipSelected() }
+
+        // Setup empty space inside the scroll view.
+        editor_scrollview.setOnTouchListener { v, event ->
+            v.performClick()
+
+            if (event.action == MotionEvent.ACTION_DOWN) {
+                content.requestFocus()
+            }
+
+            // Don't consume the event; just intercepting events in this listener.
+            return@setOnTouchListener false
+        }
     }
 
     //region Date & Time chips handling
