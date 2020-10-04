@@ -18,6 +18,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import io.github.icedshytea.journal.R
+import io.github.icedshytea.journal.common.ui.actionBar
 import io.github.icedshytea.journal.databinding.FragmentEditorBinding
 import io.github.icedshytea.journal.feature.MainFragment
 import io.github.icedshytea.journal.utils.alert.BottomAlertDialogFragment
@@ -240,6 +241,8 @@ class EditorFragment : MainFragment(),
 
         bottomAppBar?.performShow()
         bottomAppBar?.hideOnScroll = false
+
+        actionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     private fun disableFields() {

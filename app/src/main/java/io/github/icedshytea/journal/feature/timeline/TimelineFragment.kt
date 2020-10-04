@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.android.material.bottomappbar.BottomAppBar
 import io.github.icedshytea.journal.R
+import io.github.icedshytea.journal.common.ui.actionBar
 import io.github.icedshytea.journal.feature.MainFragment
 import io.github.icedshytea.journal.utils.datetime.DatePickerDialogFragment
 import kotlinx.android.synthetic.main.fragment_timeline.*
@@ -84,6 +85,8 @@ class TimelineFragment : MainFragment(), DatePickerDialog.OnDateSetListener {
         bottomAppBar?.fabAlignmentMode = BottomAppBar.FAB_ALIGNMENT_MODE_CENTER
         bottomAppBar?.performShow()
         bottomAppBar?.hideOnScroll = true
+
+        actionBar?.setDisplayHomeAsUpEnabled(false)
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
