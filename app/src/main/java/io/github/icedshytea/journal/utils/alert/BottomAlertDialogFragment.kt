@@ -16,6 +16,7 @@ class BottomAlertDialogFragment(
     private val callback: DialogInterface.OnClickListener
 ) : BottomSheetDialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        // TODO: Throw if context is null.
         val bottomSheetDialog = BottomSheetDialog(context!!)
         bottomSheetDialog.setContentView(R.layout.sheet_alert_dialog)
         bottomSheetDialog.dismissWithAnimation = true;
