@@ -147,6 +147,7 @@ class EditorFragment : MainFragment(),
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+        // TODO: LiveField's guarantees that value will never be null since it is init on creation. Need to fix LiveField API.
         val oldDateTime = editorViewModel.dateTimeField.value!!
         // Java's Calendar API's months start from 0 so we need to +- accordingly with 310's months.
         val newDateTime = oldDateTime.withDayOfMonth(dayOfMonth).withMonth(month + 1).withYear(year);
@@ -234,6 +235,8 @@ class EditorFragment : MainFragment(),
         title.isFocusableInTouchMode = false
         content.isFocusable = false
         content.isFocusableInTouchMode = false
+        date.isEnabled = false
+        time.isEnabled = false
     }
 
     private fun enableFields() {
@@ -241,6 +244,8 @@ class EditorFragment : MainFragment(),
         title.isFocusableInTouchMode = true
         content.isFocusable = true
         content.isFocusableInTouchMode = true
+        date.isEnabled = true
+        time.isEnabled = true
     }
 
     private fun showSoftKeyboard() {
