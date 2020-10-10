@@ -1,6 +1,5 @@
 package io.github.icedshytea.journal.feature.editor
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.icedshytea.journal.common.data.ActionResult
@@ -18,7 +17,9 @@ class EditorViewModel @Inject constructor(private val entryRepository: EntryRepo
     private var currentEntryId: Int? = null
 
     // Flags
+    var hasInit = false
     var isViewingMode = false
+    var isDirty = false
 
     // Fields.
     val titleField = LiveField("")

@@ -14,4 +14,11 @@
             android:title="Edit"
             app:showAsAction="ifRoom">
     </item>
+    <item
+            android:id="@+id/save"
+            android:icon="@drawable/ic_check"
+            app:iconTint="?attr/colorOnSurface"
+            android:title="Save"
+            app:showAsAction="ifRoom">
+    </item>
 </menu>
