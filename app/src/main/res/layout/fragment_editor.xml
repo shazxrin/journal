@@ -31,10 +31,7 @@
                     android:background="@android:color/transparent"
                     android:focusable="true"
                     android:hint="Title"
-                    android:nextFocusDown="@id/content"
-                    android:text="@={viewModel.titleField}"
-                    android:textStyle="bold"
-                    app:fontFamily="@font/vollkorn" />
+                    android:nextFocusDown="@id/content" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="wrap_content"
@@ -48,8 +45,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
-                        android:text="@{DateTimeHelper.formatDate(viewModel.dateTimeField)}"
-                        app:fontFamily="@font/libre_baskerville"
                         app:chipIcon="@drawable/ic_date"
                         app:iconStartPadding="4dp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -63,8 +58,6 @@
                         style="@style/Widget.App.Chip"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{DateTimeHelper.formatTime(viewModel.dateTimeField)}"
-                        app:fontFamily="@font/libre_baskerville"
                         app:chipIcon="@drawable/ic_time"
                         app:iconStartPadding="4dp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -83,9 +76,7 @@
                     android:focusable="true"
                     android:gravity="start"
                     android:hint="Content"
-                    android:inputType="textMultiLine"
-                    android:text="@={viewModel.contentField}"
-                    app:fontFamily="@font/libre_baskerville" />
+                    android:inputType="textMultiLine"/>
         </LinearLayout>
     </ScrollView>
 </layout>

@@ -11,6 +11,7 @@ import javax.inject.Singleton
 
 @Singleton
 @Component(modules = [
+    MarkwonModule::class,
     DataModule::class,
     ViewModelModule::class,
     ViewModelFactoryModule::class,

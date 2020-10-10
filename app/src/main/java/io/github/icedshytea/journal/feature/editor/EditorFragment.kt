@@ -6,29 +6,33 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.DatePicker
 import android.widget.TimePicker
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.core.widget.doOnTextChanged
+import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import io.github.icedshytea.journal.R
 import io.github.icedshytea.journal.common.ui.actionBar
-import io.github.icedshytea.journal.databinding.FragmentEditorBinding
 import io.github.icedshytea.journal.feature.MainFragment
 import io.github.icedshytea.journal.utils.alert.BottomAlertDialogFragment
 import io.github.icedshytea.journal.utils.datetime.DatePickerDialogFragment
+import io.github.icedshytea.journal.utils.datetime.DateTimeHelper
 import io.github.icedshytea.journal.utils.datetime.TimePickerDialogFragment
+import io.noties.markwon.Markwon
 import kotlinx.android.synthetic.main.fragment_editor.*
+import javax.inject.Inject
 
-class EditorFragment : MainFragment(),
+class EditorFragment() : MainFragment(),
     DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener
 {
+    @Inject
+    lateinit var markwon: Markwon
+
     private lateinit var editorViewModel: EditorViewModel
 
     private val args: EditorFragmentArgs by navArgs()
@@ -39,11 +43,16 @@ class EditorFragment : MainFragment(),
         setHasOptionsMenu(true)
 
         editorViewModel = initViewModel()
-        editorViewModel.isViewingMode = args.entryId != -1
 
-        // Load entry by id (view mode).
-        if (editorViewModel.isViewingMode) {
-            editorViewModel.load(args.entryId)
+        if (!editorViewModel.hasInit) {
+            editorViewModel.isViewingMode = args.entryId != -1
+
+            // Load entry by id (view mode).
+            if (editorViewModel.isViewingMode) {
+                editorViewModel.load(args.entryId)
+            }
+
+            editorViewModel.hasInit = true
         }
     }
 
@@ -52,7 +61,7 @@ class EditorFragment : MainFragment(),
 
         requireActivity().onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (!editorViewModel.isViewingMode) {
+                if (editorViewModel.isDirty) {
                     BottomAlertDialogFragment(
                         "Do you want to save or discard changes?",
                         "Save",
@@ -72,13 +81,36 @@ class EditorFragment : MainFragment(),
         })
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        // Bind viewmodel fields.
-        val binding = FragmentEditorBinding.inflate(inflater, container, false)
-        binding.viewModel = editorViewModel
-        binding.lifecycleOwner = viewLifecycleOwner
+    private fun bindViewModelFields() {
+        editorViewModel.dateTimeField.observe(viewLifecycleOwner, Observer { value ->
+            date.text = DateTimeHelper.formatDate(value)
+            time.text = DateTimeHelper.formatTime(value)
+        })
 
-        // Bind viewmodel statuses.
+        title.doAfterTextChanged { text ->
+            if (editorViewModel.isViewingMode) {
+                return@doAfterTextChanged
+            }
+
+            if (editorViewModel.titleField.value != text.toString()) {
+                editorViewModel.titleField.postValue(text.toString())
+                editorViewModel.isDirty = true
+            }
+        }
+
+        content.doAfterTextChanged { text ->
+            if (editorViewModel.isViewingMode) {
+                return@doAfterTextChanged
+            }
+
+            if (editorViewModel.contentField.value != text.toString()) {
+                editorViewModel.contentField.postValue(text.toString())
+                editorViewModel.isDirty = true
+            }
+        }
+    }
+
+    private fun bindViewModelStatuses() {
         editorViewModel.saveActionResult.consume(viewLifecycleOwner, Observer { status ->
             status
                 .onSuccess {
@@ -95,6 +127,13 @@ class EditorFragment : MainFragment(),
 
         editorViewModel.loadActionResult.consume(viewLifecycleOwner, Observer { status ->
             status
+                .onSuccess {
+                    val titleValue = editorViewModel.titleField.value ?: ""
+                    val contentValue = editorViewModel.contentField.value ?: ""
+
+                    title.setText(titleValue)
+                    content.setText(if (editorViewModel.isViewingMode) markwon.toMarkdown(contentValue) else contentValue)
+                }
                 .onFailure {
                     Toast.makeText(context, "Failed to load entry", Toast.LENGTH_SHORT).show()
                 }
@@ -111,12 +150,17 @@ class EditorFragment : MainFragment(),
                     Toast.makeText(context, "Error occurred while deleting entry", Toast.LENGTH_SHORT).show()
                 }
         })
+    }
 
-        return binding.root
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_editor, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        bindViewModelFields()
+        bindViewModelStatuses()
 
         setupBottomAppBar()
 
@@ -166,6 +210,7 @@ class EditorFragment : MainFragment(),
         val newDateTime = oldDateTime.withDayOfMonth(dayOfMonth).withMonth(month + 1).withYear(year);
 
         editorViewModel.dateTimeField.postValue(newDateTime)
+        editorViewModel.isDirty = true
     }
 
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
@@ -173,6 +218,7 @@ class EditorFragment : MainFragment(),
         val newDateTime = oldDateTime.withHour(hourOfDay).withMinute(minute)
 
         editorViewModel.dateTimeField.postValue(newDateTime)
+        editorViewModel.isDirty = true
     }
     //endregion
 
@@ -183,6 +229,9 @@ class EditorFragment : MainFragment(),
 
         if (editorViewModel.isViewingMode) {
             inflater.inflate(R.menu.menu_editor_viewer, menu)
+            if (!editorViewModel.isDirty) {
+                menu.findItem(R.id.save).isVisible = false
+            }
         }
         else {
             inflater.inflate(R.menu.menu_editor, menu)
@@ -209,20 +258,34 @@ class EditorFragment : MainFragment(),
             R.id.delete -> {
                 handleDeleteOptionItemSelected()
             }
+            R.id.preview -> {
+                editorViewModel.isViewingMode = true
+
+                // Enable markdown rendering
+                content.setText(markwon.toMarkdown(editorViewModel.contentField.value ?: ""))
+
+                disableFields()
+
+                hideSoftKeyboard()
+
+                activity?.invalidateOptionsMenu()
+                setupBottomAppBar()
+            }
             R.id.edit -> {
-                if (editorViewModel.isViewingMode) {
-                    editorViewModel.isViewingMode = false
+                editorViewModel.isViewingMode = false
 
-                    enableFields()
+                // Disable markdown rendering.
+                content.setText(editorViewModel.contentField.value ?: "")
 
-                    title.requestFocus()
-                    title.setSelection(title.text?.length ?: 0) // Set cursor at the back
+                enableFields()
 
-                    showSoftKeyboard()
+                title.requestFocus()
+                title.setSelection(title.text?.length ?: 0) // Set cursor at the back
 
-                    activity?.invalidateOptionsMenu()
-                    setupBottomAppBar()
-                }
+                showSoftKeyboard()
+
+                activity?.invalidateOptionsMenu()
+                setupBottomAppBar()
             }
             android.R.id.home -> {
                 if (!editorViewModel.isViewingMode) hideSoftKeyboard()
