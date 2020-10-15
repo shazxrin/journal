@@ -8,13 +8,14 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.github.icedshytea.journal.R
 import io.github.icedshytea.journal.data.entity.Entry
+import io.noties.markwon.Markwon
 import kotlinx.android.synthetic.main.item_timeline_entry.view.*
 import kotlinx.android.synthetic.main.item_timeline_header.view.*
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 import java.lang.Exception
 
-class TimelineListAdapter
+class TimelineListAdapter(private val markwon: Markwon)
     : ListAdapter<TimelineListAdapter.TimelineListItem, RecyclerView.ViewHolder>(TimelineListItemDiffCallback()) {
     private var onEntryItemClickedHandler: ((Entry) -> Unit)? = null
 
@@ -97,7 +98,7 @@ class TimelineListAdapter
         }
     }
 
-    class HeaderViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
+    inner class HeaderViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         private val dayTextView = view.day
 
         fun bind(date: LocalDate) {
@@ -115,8 +116,10 @@ class TimelineListAdapter
         }
     }
 
-    class EntryItemViewHolder(private val view: View, private val onEntryItemClickHandler: ((Entry) -> Unit)?)
-        : RecyclerView.ViewHolder(view) {
+    inner class EntryItemViewHolder(
+        private val view: View,
+        private val onEntryItemClickHandler: ((Entry) -> Unit)?
+    ) : RecyclerView.ViewHolder(view) {
         private val titleTextView = view.title
         private val timeTextView = view.time
         private val contentTextView = view.content
@@ -127,7 +130,7 @@ class TimelineListAdapter
             }
 
             titleTextView.text = entry.title
-            contentTextView.text = entry.content
+            contentTextView.text = markwon.toMarkdown(entry.content)
             timeTextView.text = entry.dateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
 
             view.setOnClickListener {

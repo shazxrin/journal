@@ -12,13 +12,18 @@ import io.github.icedshytea.journal.R
 import io.github.icedshytea.journal.common.ui.actionBar
 import io.github.icedshytea.journal.feature.MainFragment
 import io.github.icedshytea.journal.utils.datetime.DatePickerDialogFragment
+import io.noties.markwon.Markwon
 import kotlinx.android.synthetic.main.fragment_timeline.*
 import org.threeten.bp.LocalDate
+import javax.inject.Inject
 
 class TimelineFragment : MainFragment(), DatePickerDialog.OnDateSetListener {
     private lateinit var timelineViewModel: TimelineViewModel
 
-    private val entryAdapter = TimelineListAdapter()
+    @Inject
+    lateinit var markwon: Markwon
+
+    private lateinit var entryAdapter: TimelineListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +31,8 @@ class TimelineFragment : MainFragment(), DatePickerDialog.OnDateSetListener {
         setHasOptionsMenu(true)
 
         timelineViewModel = initViewModel()
+
+        entryAdapter = TimelineListAdapter(markwon)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
