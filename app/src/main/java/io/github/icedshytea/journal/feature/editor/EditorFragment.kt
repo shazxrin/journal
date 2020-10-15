@@ -59,6 +59,7 @@ class EditorFragment() : MainFragment(),
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
+        // Override back pressed behaviour to show unsaved changes dialog.
         requireActivity().onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (editorViewModel.isDirty) {
@@ -81,6 +82,7 @@ class EditorFragment() : MainFragment(),
         })
     }
 
+    //region Viewmodel Binding
     private fun bindViewModelFields() {
         editorViewModel.dateTimeField.observe(viewLifecycleOwner, Observer { value ->
             date.text = DateTimeHelper.formatDate(value)
@@ -151,6 +153,7 @@ class EditorFragment() : MainFragment(),
                 }
         })
     }
+    //endregion
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_editor, container, false)
@@ -222,41 +225,43 @@ class EditorFragment() : MainFragment(),
     }
     //endregion
 
+    //region App Bar Options Menu
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
 
         menu.clear()
 
+        inflater.inflate(R.menu.menu_editor, menu)
+
         if (editorViewModel.isViewingMode) {
-            inflater.inflate(R.menu.menu_editor_viewer, menu)
             if (!editorViewModel.isDirty) {
                 menu.findItem(R.id.save).isVisible = false
             }
+
+            menu.findItem(R.id.preview).isVisible = false
+            menu.findItem(R.id.edit).isVisible = true
         }
         else {
-            inflater.inflate(R.menu.menu_editor, menu)
+            menu.findItem(R.id.preview).isVisible = true
+            menu.findItem(R.id.edit).isVisible = false
         }
-    }
-
-    private fun handleDeleteOptionItemSelected() {
-        BottomAlertDialogFragment(
-            "Are you sure you want to delete?",
-            "Yes",
-            "No",
-            DialogInterface.OnClickListener { dialog, id ->
-                when (id) {
-                    R.id.positive_button -> editorViewModel.delete()
-                    R.id.negative_button -> dialog.cancel()
-                }
-            }
-        ).show(childFragmentManager, "DeleteBottomAlertDialogFragment")
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.save -> editorViewModel.save()
             R.id.delete -> {
-                handleDeleteOptionItemSelected()
+                BottomAlertDialogFragment(
+                    "Are you sure you want to delete?",
+                    "Yes",
+                    "No",
+                    DialogInterface.OnClickListener { dialog, id ->
+                        when (id) {
+                            R.id.positive_button -> editorViewModel.delete()
+                            R.id.negative_button -> dialog.cancel()
+                        }
+                    }
+                ).show(childFragmentManager, "DeleteBottomAlertDialogFragment")
             }
             R.id.preview -> {
                 editorViewModel.isViewingMode = true
@@ -292,12 +297,12 @@ class EditorFragment() : MainFragment(),
 
                 activity?.onBackPressed()
             }
-
             else -> return super.onOptionsItemSelected(item)
         }
 
         return true
     }
+    //endregion
 
     private fun setupBottomAppBar() {
         fabBottomAppBar?.hide()
