@@ -16,6 +16,7 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.icedshytea.journal.R
 import io.github.icedshytea.journal.common.ui.actionBar
 import io.github.icedshytea.journal.feature.MainFragment
@@ -34,6 +35,8 @@ class EditorFragment() : MainFragment(),
     lateinit var markwon: Markwon
 
     private lateinit var editorViewModel: EditorViewModel
+
+    private val markdownToolbarAdapter = MarkdownToolbarAdapter()
 
     private val args: EditorFragmentArgs by navArgs()
 
@@ -192,6 +195,35 @@ class EditorFragment() : MainFragment(),
             // Don't consume the event; just intercepting events in this listener.
             return@setOnTouchListener false
         }
+
+        // Setup markdown toolbar.
+        markdown_toolbar.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        markdownToolbarAdapter.onToolItemClickHandler = ({ markdownToolItem ->
+            if (content.selectionStart == content.selectionEnd) {
+                val curPos = content.selectionStart
+
+                var symbolToAdd = markdownToolItem.symbol
+                if (markdownToolItem.hasSymbolTail) symbolToAdd += markdownToolItem.symbol
+                val newCurPos = curPos + markdownToolItem.symbol.length
+
+                content.text?.insert(curPos, symbolToAdd)
+                content.setSelection(newCurPos)
+            } else {
+                val selectedStart = content.selectionStart
+                val selectedEnd = content.selectionEnd
+
+                content.text?.insert(selectedStart, markdownToolItem.symbol)
+                if (markdownToolItem.hasSymbolTail) {
+                    content.text?.insert(selectedEnd + markdownToolItem.symbol.length, markdownToolItem.symbol)
+
+                    content.setSelection(selectedEnd + (markdownToolItem.symbol.length * 2))
+                } else {
+                    content.setSelection(selectedEnd + markdownToolItem.symbol.length)
+                }
+            }
+        })
+        markdown_toolbar.adapter = markdownToolbarAdapter
+        markdown_toolbar.visibility = if (editorViewModel.isViewingMode) View.GONE else View.VISIBLE
     }
 
     //region Date & Time chips handling
@@ -266,6 +298,9 @@ class EditorFragment() : MainFragment(),
             R.id.preview -> {
                 editorViewModel.isViewingMode = true
 
+                // Hide markdown toolbar.
+                markdown_toolbar.visibility = View.GONE
+
                 // Enable markdown rendering
                 content.setText(markwon.toMarkdown(editorViewModel.contentField.value ?: ""))
 
@@ -278,6 +313,9 @@ class EditorFragment() : MainFragment(),
             }
             R.id.edit -> {
                 editorViewModel.isViewingMode = false
+
+                // Show markdown toolbar.
+                markdown_toolbar.visibility = View.VISIBLE
 
                 // Disable markdown rendering.
                 content.setText(editorViewModel.contentField.value ?: "")
