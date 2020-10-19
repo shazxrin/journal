@@ -281,7 +281,15 @@ class EditorFragment() : MainFragment(),
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.save -> editorViewModel.save()
+            R.id.save -> {
+                if (editorViewModel.titleField.value?.length == 0
+                    || editorViewModel.contentField.value?.length == 0) {
+                    Toast.makeText(requireContext(), "Cannot save entry with empty fields!", Toast.LENGTH_LONG)
+                        .show()
+                } else {
+                    editorViewModel.save()
+                }
+            }
             R.id.delete -> {
                 BottomAlertDialogFragment(
                     "Are you sure you want to delete?",
