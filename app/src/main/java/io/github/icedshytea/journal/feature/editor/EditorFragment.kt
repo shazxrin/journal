@@ -1,15 +1,11 @@
 package io.github.icedshytea.journal.feature.editor
 
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
-import android.widget.DatePicker
-import android.widget.TimePicker
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.widget.doAfterTextChanged
@@ -22,19 +18,22 @@ import io.github.icedshytea.journal.common.ui.actionBar
 import io.github.icedshytea.journal.feature.MainFragment
 import io.github.icedshytea.journal.common.ui.alert.BottomAlertDialogFragment
 import io.github.icedshytea.journal.common.ui.datetime.DatePickerDialogFragment
+import io.github.icedshytea.journal.common.ui.datetime.DatePickerDialogViewModel
 import io.github.icedshytea.journal.utils.datetime.DateTimeHelper
 import io.github.icedshytea.journal.common.ui.datetime.TimePickerDialogFragment
+import io.github.icedshytea.journal.common.ui.datetime.TimePickerDialogViewModel
 import io.noties.markwon.Markwon
 import kotlinx.android.synthetic.main.fragment_editor.*
+import org.threeten.bp.LocalDateTime
 import javax.inject.Inject
 
-class EditorFragment() : MainFragment(),
-    DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener
-{
+class EditorFragment() : MainFragment() {
     @Inject
     lateinit var markwon: Markwon
 
     private lateinit var editorViewModel: EditorViewModel
+    private lateinit var datePickerDialogViewModel: DatePickerDialogViewModel
+    private lateinit var timePickerDialogViewModel: TimePickerDialogViewModel
 
     private val markdownToolbarAdapter = MarkdownToolbarAdapter()
 
@@ -46,6 +45,8 @@ class EditorFragment() : MainFragment(),
         setHasOptionsMenu(true)
 
         editorViewModel = initViewModel()
+        datePickerDialogViewModel = initSharedViewModel()
+        timePickerDialogViewModel = initSharedViewModel()
 
         if (!editorViewModel.hasInit) {
             editorViewModel.isViewingMode = args.entryId != -1
@@ -90,6 +91,20 @@ class EditorFragment() : MainFragment(),
         editorViewModel.dateTimeField.observe(viewLifecycleOwner, Observer { value ->
             date.text = DateTimeHelper.formatDate(value)
             time.text = DateTimeHelper.formatTime(value)
+        })
+
+        datePickerDialogViewModel.userSelectedDate.consume(viewLifecycleOwner, Observer { value ->
+            val dateTime = editorViewModel.dateTimeField.value!!
+            editorViewModel.dateTimeField.postValue(LocalDateTime.of(value, dateTime.toLocalTime()))
+
+            editorViewModel.isDirty = true
+        })
+
+        timePickerDialogViewModel.userSelectedTime.consume(viewLifecycleOwner, Observer { value ->
+            val dateTime = editorViewModel.dateTimeField.value!!
+            editorViewModel.dateTimeField.postValue(LocalDateTime.of(dateTime.toLocalDate(), value))
+
+            editorViewModel.isDirty = true
         })
 
         title.doAfterTextChanged { text ->
@@ -181,8 +196,14 @@ class EditorFragment() : MainFragment(),
         }
 
         // Setup date & time chips.
-        date.setOnClickListener { handleDateChipSelected() }
-        time.setOnClickListener { handleTimeChipSelected() }
+        date.setOnClickListener {
+            datePickerDialogViewModel.showSelectedDate = editorViewModel.dateTimeField.value!!.toLocalDate()
+            DatePickerDialogFragment().show(requireFragmentManager(), "DatePickerDialogFragment")
+        }
+        time.setOnClickListener {
+            timePickerDialogViewModel.showSelectedTime = editorViewModel.dateTimeField.value!!.toLocalTime()
+            TimePickerDialogFragment().show(childFragmentManager, "TimePickerDialogFragment")
+        }
 
         // Setup empty space inside the scroll view.
         editor_scrollview.setOnTouchListener { v, event ->
@@ -225,37 +246,6 @@ class EditorFragment() : MainFragment(),
         markdown_toolbar.adapter = markdownToolbarAdapter
         markdown_toolbar.visibility = if (editorViewModel.isViewingMode) View.GONE else View.VISIBLE
     }
-
-    //region Date & Time chips handling
-    private fun handleDateChipSelected() {
-        val datePicker = DatePickerDialogFragment(this, editorViewModel.dateTimeField.value!!.toLocalDate())
-        datePicker.show(childFragmentManager, "DatePickerDialogFragment")
-    }
-
-    private fun handleTimeChipSelected() {
-        // TODO: LiveField's guarantees that value will never be null since it is init on creation. Need to fix LiveField API.
-        val timePicker = TimePickerDialogFragment(this, editorViewModel.dateTimeField.value!!.toLocalTime())
-        timePicker.show(childFragmentManager, "TimePickerDialogFragment")
-    }
-
-    override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-        // TODO: LiveField's guarantees that value will never be null since it is init on creation. Need to fix LiveField API.
-        val oldDateTime = editorViewModel.dateTimeField.value!!
-        // Java's Calendar API's months start from 0 so we need to +- accordingly with 310's months.
-        val newDateTime = oldDateTime.withDayOfMonth(dayOfMonth).withMonth(month + 1).withYear(year);
-
-        editorViewModel.dateTimeField.postValue(newDateTime)
-        editorViewModel.isDirty = true
-    }
-
-    override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
-        val oldDateTime = editorViewModel.dateTimeField.value!!
-        val newDateTime = oldDateTime.withHour(hourOfDay).withMinute(minute)
-
-        editorViewModel.dateTimeField.postValue(newDateTime)
-        editorViewModel.isDirty = true
-    }
-    //endregion
 
     //region App Bar Options Menu
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

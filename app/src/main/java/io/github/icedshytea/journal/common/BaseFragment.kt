@@ -13,4 +13,8 @@ abstract class BaseFragment : DaggerFragment() {
     inline fun <reified VM : ViewModel> initViewModel(): VM {
         return ViewModelProviders.of(this, viewModelFactory).get(VM::class.java)
     }
+
+    inline fun <reified VM : ViewModel> initSharedViewModel(): VM {
+        return ViewModelProviders.of(requireActivity(), viewModelFactory).get(VM::class.java)
+    }
 }
