@@ -1,4 +1,4 @@
-package io.github.icedshytea.journal.utils.alert
+package io.github.icedshytea.journal.common.ui.alert
 
 import android.app.Dialog
 import android.content.DialogInterface

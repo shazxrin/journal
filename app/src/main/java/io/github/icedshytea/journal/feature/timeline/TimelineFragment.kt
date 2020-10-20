@@ -11,7 +11,7 @@ import com.google.android.material.bottomappbar.BottomAppBar
 import io.github.icedshytea.journal.R
 import io.github.icedshytea.journal.common.ui.actionBar
 import io.github.icedshytea.journal.feature.MainFragment
-import io.github.icedshytea.journal.utils.datetime.DatePickerDialogFragment
+import io.github.icedshytea.journal.common.ui.datetime.DatePickerDialogFragment
 import io.noties.markwon.Markwon
 import kotlinx.android.synthetic.main.fragment_timeline.*
 import org.threeten.bp.LocalDate

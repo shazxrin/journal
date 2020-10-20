@@ -1,4 +1,4 @@
-package io.github.icedshytea.journal.utils.datetime
+package io.github.icedshytea.journal.common.ui.datetime
 
 import android.app.DatePickerDialog
 import android.app.Dialog
