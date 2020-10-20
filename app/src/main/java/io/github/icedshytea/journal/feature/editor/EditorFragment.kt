@@ -46,9 +46,9 @@ class EditorFragment() : MainFragment() {
 
         setHasOptionsMenu(true)
 
-        editorViewModel = initViewModel()
-        datePickerDialogViewModel = initSharedViewModel()
-        timePickerDialogViewModel = initSharedViewModel()
+        editorViewModel = getViewModel()
+        datePickerDialogViewModel = getSharedViewModel()
+        timePickerDialogViewModel = getSharedViewModel()
 
         if (!editorViewModel.hasInit) {
             editorViewModel.isViewingMode = args.entryId != -1

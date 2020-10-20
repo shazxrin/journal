@@ -28,11 +28,11 @@ abstract class BaseDialogFragment() : DialogFragment(), HasSupportFragmentInject
         return childFragmentInjector
     }
 
-    inline fun <reified VM : ViewModel> initViewModel(): VM {
+    inline fun <reified VM : ViewModel> getViewModel(): VM {
         return ViewModelProviders.of(this, viewModelFactory).get(VM::class.java)
     }
 
-    inline fun <reified VM : ViewModel> initSharedViewModel(): VM {
+    inline fun <reified VM : ViewModel> getSharedViewModel(): VM {
         return ViewModelProviders.of(requireActivity(), viewModelFactory).get(VM::class.java)
     }
 }

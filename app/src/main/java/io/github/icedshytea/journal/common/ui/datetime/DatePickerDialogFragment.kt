@@ -13,7 +13,7 @@ class DatePickerDialogFragment() : BaseDialogFragment(), DatePickerDialog.OnDate
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        datePickerDialogViewModel = initSharedViewModel()
+        datePickerDialogViewModel = getSharedViewModel()
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

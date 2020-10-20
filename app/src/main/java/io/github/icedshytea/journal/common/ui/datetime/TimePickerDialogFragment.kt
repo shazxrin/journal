@@ -13,7 +13,7 @@ class TimePickerDialogFragment() : BaseDialogFragment(), TimePickerDialog.OnTime
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        timePickerDialogViewModel = initSharedViewModel()
+        timePickerDialogViewModel = getSharedViewModel()
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

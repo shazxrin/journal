@@ -32,8 +32,8 @@ class TimelineFragment : MainFragment(), DatePickerDialog.OnDateSetListener {
 
         setHasOptionsMenu(true)
 
-        timelineViewModel = initViewModel()
-        datePickerDialogViewModel = initSharedViewModel()
+        timelineViewModel = getViewModel()
+        datePickerDialogViewModel = getSharedViewModel()
 
         entryAdapter = TimelineListAdapter(markwon)
     }
