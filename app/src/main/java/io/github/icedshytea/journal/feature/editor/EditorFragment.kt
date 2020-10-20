@@ -24,18 +24,20 @@ import io.github.icedshytea.journal.common.ui.datetime.TimePickerDialogFragment
 import io.github.icedshytea.journal.common.ui.datetime.TimePickerDialogViewModel
 import io.noties.markwon.Markwon
 import kotlinx.android.synthetic.main.fragment_editor.*
+import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
+import org.threeten.bp.LocalTime
 import javax.inject.Inject
 
 class EditorFragment() : MainFragment() {
-    @Inject
-    lateinit var markwon: Markwon
+    // Markdown.
+    @Inject lateinit var markwon: Markwon
+    private val markdownToolbarAdapter = MarkdownToolbarAdapter()
 
+    // View models.
     private lateinit var editorViewModel: EditorViewModel
     private lateinit var datePickerDialogViewModel: DatePickerDialogViewModel
     private lateinit var timePickerDialogViewModel: TimePickerDialogViewModel
-
-    private val markdownToolbarAdapter = MarkdownToolbarAdapter()
 
     private val args: EditorFragmentArgs by navArgs()
 
@@ -94,14 +96,14 @@ class EditorFragment() : MainFragment() {
         })
 
         datePickerDialogViewModel.userSelectedDateLiveData.consume(viewLifecycleOwner, Observer { value ->
-            val dateTime = editorViewModel.dateTimeLiveData.value!!
+            val dateTime = editorViewModel.dateTimeLiveData.value ?: LocalDateTime.now()
             editorViewModel.dateTimeLiveData.postValue(LocalDateTime.of(value, dateTime.toLocalTime()))
 
             editorViewModel.isDirty = true
         })
 
         timePickerDialogViewModel.userSelectedTimeLiveData.consume(viewLifecycleOwner, Observer { value ->
-            val dateTime = editorViewModel.dateTimeLiveData.value!!
+            val dateTime = editorViewModel.dateTimeLiveData.value ?: LocalDateTime.now()
             editorViewModel.dateTimeLiveData.postValue(LocalDateTime.of(dateTime.toLocalDate(), value))
 
             editorViewModel.isDirty = true
@@ -129,7 +131,7 @@ class EditorFragment() : MainFragment() {
             }
         }
 
-        editorViewModel.saveActionResult.consume(viewLifecycleOwner, Observer { status ->
+        editorViewModel.saveResultLiveData.consume(viewLifecycleOwner, Observer { status ->
             status
                 .onSuccess {
                     Toast.makeText(context, "Entry saved!", Toast.LENGTH_SHORT).show()
@@ -143,7 +145,7 @@ class EditorFragment() : MainFragment() {
                 }
         })
 
-        editorViewModel.loadActionResult.consume(viewLifecycleOwner, Observer { status ->
+        editorViewModel.loadResultLiveData.consume(viewLifecycleOwner, Observer { status ->
             status
                 .onSuccess {
                     val titleValue = editorViewModel.titleLiveData.value ?: ""
@@ -157,7 +159,7 @@ class EditorFragment() : MainFragment() {
                 }
         })
 
-        editorViewModel.deleteActionResult.consume(viewLifecycleOwner, Observer { status ->
+        editorViewModel.deleteResultLiveData.consume(viewLifecycleOwner, Observer { status ->
             status
                 .onSuccess {
                     Toast.makeText(context, "Entry deleted!", Toast.LENGTH_SHORT).show()
@@ -178,9 +180,9 @@ class EditorFragment() : MainFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        bindViewModelLiveData()
-
         setupBottomAppBar()
+
+        bindViewModelLiveData()
 
         // Setup viewing mode.
         if (editorViewModel.isViewingMode) {
@@ -194,11 +196,13 @@ class EditorFragment() : MainFragment() {
 
         // Setup date & time chips.
         date.setOnClickListener {
-            datePickerDialogViewModel.showSelectedDate = editorViewModel.dateTimeLiveData.value!!.toLocalDate()
+            datePickerDialogViewModel.showSelectedDate =
+                editorViewModel.dateTimeLiveData.value?.toLocalDate() ?: LocalDate.now()
             DatePickerDialogFragment().show(requireFragmentManager(), "DatePickerDialogFragment")
         }
         time.setOnClickListener {
-            timePickerDialogViewModel.showSelectedTime = editorViewModel.dateTimeLiveData.value!!.toLocalTime()
+            timePickerDialogViewModel.showSelectedTime =
+                editorViewModel.dateTimeLiveData.value?.toLocalTime() ?: LocalTime.now()
             TimePickerDialogFragment().show(childFragmentManager, "TimePickerDialogFragment")
         }
 

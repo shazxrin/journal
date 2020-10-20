@@ -1,17 +1,17 @@
 package io.github.icedshytea.journal.common.data
 
-class ActionResult private constructor() {
+class Result private constructor() {
     private var throwable: Throwable? = null
     private var isSuccess: Boolean = false
 
     companion object {
-        fun success(): ActionResult {
-            return ActionResult()
+        fun success(): Result {
+            return Result()
                 .apply { isSuccess = true }
         }
 
-        fun failure(throwable: Throwable): ActionResult {
-            return ActionResult().apply {
+        fun failure(throwable: Throwable): Result {
+            return Result().apply {
                 this.isSuccess = false
                 this.throwable = throwable
             }
@@ -23,7 +23,7 @@ class ActionResult private constructor() {
 
     fun getThrowableOrNull() = throwable
 
-    fun onSuccess(action: () -> Unit): ActionResult {
+    fun onSuccess(action: () -> Unit): Result {
         if (isSuccess()) {
             action.invoke()
         }
@@ -31,7 +31,7 @@ class ActionResult private constructor() {
         return this
     }
 
-    fun onFailure(action: (Throwable?) -> Unit): ActionResult {
+    fun onFailure(action: (Throwable?) -> Unit): Result {
         if (isFailure()) {
             getThrowableOrNull()?.let(action)
         }

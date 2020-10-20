@@ -3,7 +3,7 @@ package io.github.icedshytea.journal.feature.editor
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.github.icedshytea.journal.common.data.ActionResult
+import io.github.icedshytea.journal.common.data.Result
 import io.github.icedshytea.journal.common.data.ConsumableLiveData
 import io.github.icedshytea.journal.data.entity.Entry
 import io.github.icedshytea.journal.data.repository.EntryRepository
@@ -26,10 +26,9 @@ class EditorViewModel @Inject constructor(private val entryRepository: EntryRepo
     val contentLiveData = MutableLiveData<String>("")
     val dateTimeLiveData = MutableLiveData<LocalDateTime>(LocalDateTime.now())
 
-    // Results.
-    val saveActionResult = ConsumableLiveData<ActionResult>()
-    val loadActionResult = ConsumableLiveData<ActionResult>()
-    val deleteActionResult = ConsumableLiveData<ActionResult>()
+    val saveResultLiveData = ConsumableLiveData<Result>()
+    val loadResultLiveData = ConsumableLiveData<Result>()
+    val deleteResultLiveData = ConsumableLiveData<Result>()
 
     // Actions.
     fun save() {
@@ -49,10 +48,10 @@ class EditorViewModel @Inject constructor(private val entryRepository: EntryRepo
                     entryRepository.update(entry)
                 }
 
-                saveActionResult.postValue(ActionResult.success())
+                saveResultLiveData.postValue(Result.success())
             }
             catch (e: Exception) {
-                saveActionResult.postValue(ActionResult.failure(e))
+                saveResultLiveData.postValue(Result.failure(e))
             }
         }
     }
@@ -67,10 +66,10 @@ class EditorViewModel @Inject constructor(private val entryRepository: EntryRepo
                 contentLiveData.postValue(entry.content)
                 dateTimeLiveData.postValue(entry.dateTime)
 
-                loadActionResult.postValue(ActionResult.success())
+                loadResultLiveData.postValue(Result.success())
             }
             catch (e: Exception) {
-                loadActionResult.postValue(ActionResult.failure(e))
+                loadResultLiveData.postValue(Result.failure(e))
             }
         }
     }
@@ -82,10 +81,10 @@ class EditorViewModel @Inject constructor(private val entryRepository: EntryRepo
             try {
                 entryRepository.delete(entryToDeleteId)
 
-                deleteActionResult.postValue(ActionResult.success())
+                deleteResultLiveData.postValue(Result.success())
             }
             catch (e: Exception) {
-                deleteActionResult.postValue(ActionResult.failure(e))
+                deleteResultLiveData.postValue(Result.failure(e))
             }
         }
     }
