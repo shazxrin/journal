@@ -5,10 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import java.util.concurrent.atomic.AtomicBoolean
 
-class LiveActionResult : MutableLiveData<ActionResult>() {
+class ConsumableLiveData<T> : MutableLiveData<T>() {
     private val hasValueConsumed = AtomicBoolean(false)
 
-    fun consume(owner: LifecycleOwner, observer: Observer<ActionResult>) {
+    fun consume(owner: LifecycleOwner, observer: Observer<T>) {
         super.observe(owner, Observer {
             if (hasValueConsumed.compareAndSet(false, true)) {
                 observer.onChanged(it)
@@ -16,12 +16,12 @@ class LiveActionResult : MutableLiveData<ActionResult>() {
         })
     }
 
-    override fun postValue(value: ActionResult?) {
+    override fun postValue(value: T?) {
         hasValueConsumed.set(false)
         super.postValue(value)
     }
 
-    override fun setValue(value: ActionResult?) {
+    override fun setValue(value: T?) {
         hasValueConsumed.set(false)
         super.setValue(value)
     }

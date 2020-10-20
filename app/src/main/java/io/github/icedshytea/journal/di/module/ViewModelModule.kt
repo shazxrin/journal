@@ -7,6 +7,8 @@ import dagger.MapKey
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoMap
+import io.github.icedshytea.journal.common.ui.datetime.DatePickerDialogViewModel
+import io.github.icedshytea.journal.common.ui.datetime.TimePickerDialogViewModel
 import io.github.icedshytea.journal.feature.editor.EditorViewModel
 import io.github.icedshytea.journal.feature.timeline.TimelineViewModel
 import javax.inject.Inject
@@ -52,6 +54,16 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(TimelineViewModel::class)
     abstract fun bindTimelineViewModel(timelineViewModel: TimelineViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(DatePickerDialogViewModel::class)
+    abstract fun bindDatePickerDialogViewModel(datePickerDialogViewModel: DatePickerDialogViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(TimePickerDialogViewModel::class)
+    abstract fun bindTimePickerDialogViewModel(timePickerDialogViewModel: TimePickerDialogViewModel): ViewModel
 }
 
 @Module

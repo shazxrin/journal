@@ -12,6 +12,7 @@ import io.github.icedshytea.journal.R
 import io.github.icedshytea.journal.common.ui.actionBar
 import io.github.icedshytea.journal.feature.MainFragment
 import io.github.icedshytea.journal.common.ui.datetime.DatePickerDialogFragment
+import io.github.icedshytea.journal.common.ui.datetime.DatePickerDialogViewModel
 import io.noties.markwon.Markwon
 import kotlinx.android.synthetic.main.fragment_timeline.*
 import org.threeten.bp.LocalDate
@@ -19,6 +20,7 @@ import javax.inject.Inject
 
 class TimelineFragment : MainFragment(), DatePickerDialog.OnDateSetListener {
     private lateinit var timelineViewModel: TimelineViewModel
+    private lateinit var datePickerDialogViewModel: DatePickerDialogViewModel
 
     @Inject
     lateinit var markwon: Markwon
@@ -31,6 +33,7 @@ class TimelineFragment : MainFragment(), DatePickerDialog.OnDateSetListener {
         setHasOptionsMenu(true)
 
         timelineViewModel = initViewModel()
+        datePickerDialogViewModel = initSharedViewModel()
 
         entryAdapter = TimelineListAdapter(markwon)
     }
@@ -68,6 +71,10 @@ class TimelineFragment : MainFragment(), DatePickerDialog.OnDateSetListener {
         recyclerView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
         timelineViewModel.currentDate = LocalDate.now()
+
+        datePickerDialogViewModel.userSelectedDate.consume(viewLifecycleOwner, Observer {
+                value -> timelineViewModel.currentDate = value
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -78,8 +85,8 @@ class TimelineFragment : MainFragment(), DatePickerDialog.OnDateSetListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.datePicker) {
-            val datePickerDialogFragment = DatePickerDialogFragment(this, timelineViewModel.currentDate)
-            datePickerDialogFragment.show(this.childFragmentManager, "datePicker")
+            datePickerDialogViewModel.showSelectedDate = timelineViewModel.currentDate
+            DatePickerDialogFragment().show(requireFragmentManager(), "DatePickerDialogFragment")
         }
 
         return super.onOptionsItemSelected(item)

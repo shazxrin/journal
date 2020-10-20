@@ -3,20 +3,32 @@ package io.github.icedshytea.journal.common.ui.datetime
 import android.app.TimePickerDialog
 import android.app.Dialog
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
+import android.widget.TimePicker
+import io.github.icedshytea.journal.common.BaseDialogFragment
 import org.threeten.bp.LocalTime
 
-class TimePickerDialogFragment(
-    private val onTimeSetListener: TimePickerDialog.OnTimeSetListener,
-    private val selectedTime: LocalTime
-) : DialogFragment() {
+class TimePickerDialogFragment() : BaseDialogFragment(), TimePickerDialog.OnTimeSetListener {
+    private lateinit var timePickerDialogViewModel: TimePickerDialogViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        timePickerDialogViewModel = initSharedViewModel()
+    }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val showSelectedTime = timePickerDialogViewModel.showSelectedTime
+
         return TimePickerDialog(
-            context,
-            onTimeSetListener,
-            selectedTime.hour,
-            selectedTime.minute,
+            requireContext(),
+            this,
+            showSelectedTime.hour,
+            showSelectedTime.minute,
             true
         )
+    }
+
+    override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
+        timePickerDialogViewModel.userSelectedTime.postValue(LocalTime.of(hourOfDay, minute))
     }
 }

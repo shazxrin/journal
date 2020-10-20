@@ -3,7 +3,7 @@ package io.github.icedshytea.journal.feature.editor
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.icedshytea.journal.common.data.ActionResult
-import io.github.icedshytea.journal.common.data.LiveActionResult
+import io.github.icedshytea.journal.common.data.ConsumableLiveData
 import io.github.icedshytea.journal.common.data.LiveField
 import io.github.icedshytea.journal.data.entity.Entry
 import io.github.icedshytea.journal.data.repository.EntryRepository
@@ -27,9 +27,9 @@ class EditorViewModel @Inject constructor(private val entryRepository: EntryRepo
     val dateTimeField = LiveField(LocalDateTime.now())
 
     // Results.
-    val saveActionResult = LiveActionResult()
-    val loadActionResult = LiveActionResult()
-    val deleteActionResult = LiveActionResult()
+    val saveActionResult = ConsumableLiveData<ActionResult>()
+    val loadActionResult = ConsumableLiveData<ActionResult>()
+    val deleteActionResult = ConsumableLiveData<ActionResult>()
 
     fun save() {
         val entry = Entry(
