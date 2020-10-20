@@ -10,5 +10,5 @@ class TimePickerDialogViewModel @Inject constructor() : ViewModel() {
     var showSelectedTime: LocalTime = LocalTime.now()
 
     // Live Data.
-    val userSelectedTime = ConsumableLiveData<LocalTime>()
+    val userSelectedTimeLiveData = ConsumableLiveData<LocalTime>()
 }
