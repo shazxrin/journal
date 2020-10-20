@@ -35,6 +35,6 @@ class DatePickerDialogFragment() : BaseDialogFragment(), DatePickerDialog.OnDate
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         // Java's Calendar API's months start from 0 so we need to +- accordingly with 310's months.
-        datePickerDialogViewModel.userSelectedDate.postValue(LocalDate.of(year, month + 1, dayOfMonth))
+        datePickerDialogViewModel.userSelectedDateLiveData.postValue(LocalDate.of(year, month + 1, dayOfMonth))
     }
 }

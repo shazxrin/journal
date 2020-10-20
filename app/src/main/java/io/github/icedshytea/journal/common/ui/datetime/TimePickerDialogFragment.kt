@@ -29,6 +29,6 @@ class TimePickerDialogFragment() : BaseDialogFragment(), TimePickerDialog.OnTime
     }
 
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
-        timePickerDialogViewModel.userSelectedTime.postValue(LocalTime.of(hourOfDay, minute))
+        timePickerDialogViewModel.userSelectedTimeLiveData.postValue(LocalTime.of(hourOfDay, minute))
     }
 }

@@ -53,7 +53,7 @@ class TimelineFragment : MainFragment(), DatePickerDialog.OnDateSetListener {
         }
 
         recyclerView.adapter = entryAdapter
-        timelineViewModel.datedEntryList.observe(viewLifecycleOwner, Observer {
+        timelineViewModel.datedEntryListLiveData.observe(viewLifecycleOwner, Observer {
             entryAdapter.setData(it.first, it.second)
 
             if (it.second.isEmpty()) {
@@ -72,7 +72,7 @@ class TimelineFragment : MainFragment(), DatePickerDialog.OnDateSetListener {
 
         timelineViewModel.currentDate = LocalDate.now()
 
-        datePickerDialogViewModel.userSelectedDate.consume(viewLifecycleOwner, Observer {
+        datePickerDialogViewModel.userSelectedDateLiveData.consume(viewLifecycleOwner, Observer {
                 value -> timelineViewModel.currentDate = value
         })
     }

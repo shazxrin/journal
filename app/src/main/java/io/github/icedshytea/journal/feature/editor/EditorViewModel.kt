@@ -1,10 +1,10 @@
 package io.github.icedshytea.journal.feature.editor
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.icedshytea.journal.common.data.ActionResult
 import io.github.icedshytea.journal.common.data.ConsumableLiveData
-import io.github.icedshytea.journal.common.data.LiveField
 import io.github.icedshytea.journal.data.entity.Entry
 import io.github.icedshytea.journal.data.repository.EntryRepository
 import kotlinx.coroutines.Dispatchers
@@ -21,22 +21,23 @@ class EditorViewModel @Inject constructor(private val entryRepository: EntryRepo
     var isViewingMode = false
     var isDirty = false
 
-    // Fields.
-    val titleField = LiveField("")
-    val contentField = LiveField("")
-    val dateTimeField = LiveField(LocalDateTime.now())
+    // Live Data.
+    val titleLiveData = MutableLiveData<String>("")
+    val contentLiveData = MutableLiveData<String>("")
+    val dateTimeLiveData = MutableLiveData<LocalDateTime>(LocalDateTime.now())
 
     // Results.
     val saveActionResult = ConsumableLiveData<ActionResult>()
     val loadActionResult = ConsumableLiveData<ActionResult>()
     val deleteActionResult = ConsumableLiveData<ActionResult>()
 
+    // Actions.
     fun save() {
         val entry = Entry(
             currentEntryId ?: 0,
-            titleField.value ?: "",
-            contentField.value ?: "",
-            dateTimeField.value ?: LocalDateTime.now()
+            titleLiveData.value ?: "",
+            contentLiveData.value ?: "",
+            dateTimeLiveData.value ?: LocalDateTime.now()
         )
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -62,9 +63,9 @@ class EditorViewModel @Inject constructor(private val entryRepository: EntryRepo
                 val entry = entryRepository.get(entryId)
 
                 currentEntryId = entry.id
-                titleField.postValue(entry.title)
-                contentField.postValue(entry.content)
-                dateTimeField.postValue(entry.dateTime)
+                titleLiveData.postValue(entry.title)
+                contentLiveData.postValue(entry.content)
+                dateTimeLiveData.postValue(entry.dateTime)
 
                 loadActionResult.postValue(ActionResult.success())
             }

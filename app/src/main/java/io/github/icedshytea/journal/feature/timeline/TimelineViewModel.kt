@@ -15,7 +15,7 @@ import javax.inject.Inject
 typealias DatedEntryList = Pair<LocalDate, List<Entry>>
 
 class TimelineViewModel @Inject constructor(private val entryRepository: EntryRepository) : ViewModel() {
-    val datedEntryList = MutableLiveData<DatedEntryList>()
+    val datedEntryListLiveData = MutableLiveData<DatedEntryList>()
 
     var currentDate: LocalDate = LocalDate.now()
         set(value) {
@@ -28,7 +28,7 @@ class TimelineViewModel @Inject constructor(private val entryRepository: EntryRe
         getEntriesJob?.cancel()
 
         getEntriesJob = viewModelScope.launch(Dispatchers.IO) {
-            entryRepository.getEntriesSorted(date).collect { value -> datedEntryList.postValue(DatedEntryList(date, value)) }
+            entryRepository.getEntriesSorted(date).collect { value -> datedEntryListLiveData.postValue(DatedEntryList(date, value)) }
         }
     }
 }

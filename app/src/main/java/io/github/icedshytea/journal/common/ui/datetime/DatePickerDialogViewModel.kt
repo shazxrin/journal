@@ -10,5 +10,5 @@ class DatePickerDialogViewModel @Inject constructor() : ViewModel() {
     var showSelectedDate: LocalDate = LocalDate.now()
 
     // Live Data.
-    val userSelectedDate = ConsumableLiveData<LocalDate>()
+    val userSelectedDateLiveData = ConsumableLiveData<LocalDate>()
 }

@@ -87,22 +87,22 @@ class EditorFragment() : MainFragment() {
     }
 
     //region Viewmodel Binding
-    private fun bindViewModelFields() {
-        editorViewModel.dateTimeField.observe(viewLifecycleOwner, Observer { value ->
+    private fun bindViewModelLiveData() {
+        editorViewModel.dateTimeLiveData.observe(viewLifecycleOwner, Observer { value ->
             date.text = DateTimeHelper.formatDate(value)
             time.text = DateTimeHelper.formatTime(value)
         })
 
-        datePickerDialogViewModel.userSelectedDate.consume(viewLifecycleOwner, Observer { value ->
-            val dateTime = editorViewModel.dateTimeField.value!!
-            editorViewModel.dateTimeField.postValue(LocalDateTime.of(value, dateTime.toLocalTime()))
+        datePickerDialogViewModel.userSelectedDateLiveData.consume(viewLifecycleOwner, Observer { value ->
+            val dateTime = editorViewModel.dateTimeLiveData.value!!
+            editorViewModel.dateTimeLiveData.postValue(LocalDateTime.of(value, dateTime.toLocalTime()))
 
             editorViewModel.isDirty = true
         })
 
-        timePickerDialogViewModel.userSelectedTime.consume(viewLifecycleOwner, Observer { value ->
-            val dateTime = editorViewModel.dateTimeField.value!!
-            editorViewModel.dateTimeField.postValue(LocalDateTime.of(dateTime.toLocalDate(), value))
+        timePickerDialogViewModel.userSelectedTimeLiveData.consume(viewLifecycleOwner, Observer { value ->
+            val dateTime = editorViewModel.dateTimeLiveData.value!!
+            editorViewModel.dateTimeLiveData.postValue(LocalDateTime.of(dateTime.toLocalDate(), value))
 
             editorViewModel.isDirty = true
         })
@@ -112,8 +112,8 @@ class EditorFragment() : MainFragment() {
                 return@doAfterTextChanged
             }
 
-            if (editorViewModel.titleField.value != text.toString()) {
-                editorViewModel.titleField.postValue(text.toString())
+            if (editorViewModel.titleLiveData.value != text.toString()) {
+                editorViewModel.titleLiveData.postValue(text.toString())
                 editorViewModel.isDirty = true
             }
         }
@@ -123,14 +123,12 @@ class EditorFragment() : MainFragment() {
                 return@doAfterTextChanged
             }
 
-            if (editorViewModel.contentField.value != text.toString()) {
-                editorViewModel.contentField.postValue(text.toString())
+            if (editorViewModel.contentLiveData.value != text.toString()) {
+                editorViewModel.contentLiveData.postValue(text.toString())
                 editorViewModel.isDirty = true
             }
         }
-    }
 
-    private fun bindViewModelStatuses() {
         editorViewModel.saveActionResult.consume(viewLifecycleOwner, Observer { status ->
             status
                 .onSuccess {
@@ -148,8 +146,8 @@ class EditorFragment() : MainFragment() {
         editorViewModel.loadActionResult.consume(viewLifecycleOwner, Observer { status ->
             status
                 .onSuccess {
-                    val titleValue = editorViewModel.titleField.value ?: ""
-                    val contentValue = editorViewModel.contentField.value ?: ""
+                    val titleValue = editorViewModel.titleLiveData.value ?: ""
+                    val contentValue = editorViewModel.contentLiveData.value ?: ""
 
                     title.setText(titleValue)
                     content.setText(if (editorViewModel.isViewingMode) markwon.toMarkdown(contentValue) else contentValue)
@@ -180,8 +178,7 @@ class EditorFragment() : MainFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        bindViewModelFields()
-        bindViewModelStatuses()
+        bindViewModelLiveData()
 
         setupBottomAppBar()
 
@@ -197,11 +194,11 @@ class EditorFragment() : MainFragment() {
 
         // Setup date & time chips.
         date.setOnClickListener {
-            datePickerDialogViewModel.showSelectedDate = editorViewModel.dateTimeField.value!!.toLocalDate()
+            datePickerDialogViewModel.showSelectedDate = editorViewModel.dateTimeLiveData.value!!.toLocalDate()
             DatePickerDialogFragment().show(requireFragmentManager(), "DatePickerDialogFragment")
         }
         time.setOnClickListener {
-            timePickerDialogViewModel.showSelectedTime = editorViewModel.dateTimeField.value!!.toLocalTime()
+            timePickerDialogViewModel.showSelectedTime = editorViewModel.dateTimeLiveData.value!!.toLocalTime()
             TimePickerDialogFragment().show(childFragmentManager, "TimePickerDialogFragment")
         }
 
@@ -272,8 +269,8 @@ class EditorFragment() : MainFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.save -> {
-                if (editorViewModel.titleField.value?.length == 0
-                    || editorViewModel.contentField.value?.length == 0) {
+                if (editorViewModel.titleLiveData.value?.length == 0
+                    || editorViewModel.contentLiveData.value?.length == 0) {
                     Toast.makeText(requireContext(), "Cannot save entry with empty fields!", Toast.LENGTH_LONG)
                         .show()
                 } else {
@@ -300,7 +297,7 @@ class EditorFragment() : MainFragment() {
                 markdown_toolbar.visibility = View.GONE
 
                 // Enable markdown rendering
-                content.setText(markwon.toMarkdown(editorViewModel.contentField.value ?: ""))
+                content.setText(markwon.toMarkdown(editorViewModel.contentLiveData.value ?: ""))
 
                 disableFields()
 
@@ -316,7 +313,7 @@ class EditorFragment() : MainFragment() {
                 markdown_toolbar.visibility = View.VISIBLE
 
                 // Disable markdown rendering.
-                content.setText(editorViewModel.contentField.value ?: "")
+                content.setText(editorViewModel.contentLiveData.value ?: "")
 
                 enableFields()
 
