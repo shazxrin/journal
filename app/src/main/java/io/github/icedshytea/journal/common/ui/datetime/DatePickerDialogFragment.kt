@@ -4,10 +4,9 @@ import android.app.DatePickerDialog
 import android.app.Dialog
 import android.os.Bundle
 import android.widget.DatePicker
-import io.github.icedshytea.journal.common.BaseDialogFragment
 import org.threeten.bp.*
 
-class DatePickerDialogFragment() : BaseDialogFragment(), DatePickerDialog.OnDateSetListener {
+class DatePickerDialogFragment() : PickerDialogFragment(), DatePickerDialog.OnDateSetListener {
     private lateinit var datePickerDialogViewModel: DatePickerDialogViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {

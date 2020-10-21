@@ -1,4 +1,4 @@
-package io.github.icedshytea.journal.common
+package io.github.icedshytea.journal.common.ui.datetime
 
 import android.content.Context
 import androidx.fragment.app.DialogFragment
@@ -12,7 +12,7 @@ import dagger.android.support.HasSupportFragmentInjector
 import io.github.icedshytea.journal.di.module.ViewModelFactory
 import javax.inject.Inject
 
-abstract class BaseDialogFragment() : DialogFragment(), HasSupportFragmentInjector {
+abstract class PickerDialogFragment() : DialogFragment(), HasSupportFragmentInjector {
     @Inject
     lateinit var childFragmentInjector: DispatchingAndroidInjector<Fragment?>
 
