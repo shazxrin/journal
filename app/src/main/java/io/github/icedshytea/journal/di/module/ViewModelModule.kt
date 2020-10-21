@@ -7,6 +7,7 @@ import dagger.MapKey
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoMap
+import io.github.icedshytea.journal.common.ui.alert.AlertBottomSheetDialogViewModel
 import io.github.icedshytea.journal.common.ui.datetime.DatePickerDialogViewModel
 import io.github.icedshytea.journal.common.ui.datetime.TimePickerDialogViewModel
 import io.github.icedshytea.journal.feature.editor.EditorViewModel
@@ -64,6 +65,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(TimePickerDialogViewModel::class)
     abstract fun bindTimePickerDialogViewModel(timePickerDialogViewModel: TimePickerDialogViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(AlertBottomSheetDialogViewModel::class)
+    abstract fun bindAlertBottomSheetDialogViewModel(alertBottomSheetDialogViewModel: AlertBottomSheetDialogViewModel): ViewModel
 }
 
 @Module

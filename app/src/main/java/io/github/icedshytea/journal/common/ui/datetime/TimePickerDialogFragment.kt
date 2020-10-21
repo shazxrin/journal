@@ -4,10 +4,9 @@ import android.app.TimePickerDialog
 import android.app.Dialog
 import android.os.Bundle
 import android.widget.TimePicker
-import io.github.icedshytea.journal.common.BaseDialogFragment
 import org.threeten.bp.LocalTime
 
-class TimePickerDialogFragment() : BaseDialogFragment(), TimePickerDialog.OnTimeSetListener {
+class TimePickerDialogFragment() : PickerDialogFragment(), TimePickerDialog.OnTimeSetListener {
     private lateinit var timePickerDialogViewModel: TimePickerDialogViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {

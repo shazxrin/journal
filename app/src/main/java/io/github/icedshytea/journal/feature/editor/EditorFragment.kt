@@ -16,7 +16,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.icedshytea.journal.R
 import io.github.icedshytea.journal.common.ui.actionBar
 import io.github.icedshytea.journal.feature.MainFragment
-import io.github.icedshytea.journal.common.ui.alert.BottomAlertDialogFragment
+import io.github.icedshytea.journal.common.ui.alert.AlertBottomSheetDialogFragment
+import io.github.icedshytea.journal.common.ui.alert.AlertBottomSheetDialogViewModel
+import io.github.icedshytea.journal.common.ui.alert.AlertBottomSheetResponse
 import io.github.icedshytea.journal.common.ui.datetime.DatePickerDialogFragment
 import io.github.icedshytea.journal.common.ui.datetime.DatePickerDialogViewModel
 import io.github.icedshytea.journal.utils.datetime.DateTimeHelper
@@ -27,6 +29,7 @@ import kotlinx.android.synthetic.main.fragment_editor.*
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.LocalTime
+import java.lang.RuntimeException
 import javax.inject.Inject
 
 class EditorFragment() : MainFragment() {
@@ -38,6 +41,7 @@ class EditorFragment() : MainFragment() {
     private lateinit var editorViewModel: EditorViewModel
     private lateinit var datePickerDialogViewModel: DatePickerDialogViewModel
     private lateinit var timePickerDialogViewModel: TimePickerDialogViewModel
+    private lateinit var alertDialogViewModel: AlertBottomSheetDialogViewModel
 
     private val args: EditorFragmentArgs by navArgs()
 
@@ -49,6 +53,7 @@ class EditorFragment() : MainFragment() {
         editorViewModel = getViewModel()
         datePickerDialogViewModel = getSharedViewModel()
         timePickerDialogViewModel = getSharedViewModel()
+        alertDialogViewModel = getSharedViewModel()
 
         if (!editorViewModel.hasInit) {
             editorViewModel.isViewingMode = args.entryId != -1
@@ -69,17 +74,16 @@ class EditorFragment() : MainFragment() {
         requireActivity().onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (editorViewModel.isDirty) {
-                    BottomAlertDialogFragment(
-                        "Do you want to save or discard changes?",
-                        "Save",
-                        "Discard",
-                        DialogInterface.OnClickListener { _, id ->
-                            when (id) {
-                                R.id.positive_button -> editorViewModel.save()
-                                R.id.negative_button -> findNavController().navigateUp()
-                            }
-                        }
-                    ).show(childFragmentManager, "SaveBottomAlertDialogFragment")
+                    alertDialogViewModel.title = "Do you want to save or discard changes?"
+                    alertDialogViewModel.positiveButtonText = "Save"
+                    alertDialogViewModel.negativeButtonText = "Discard"
+
+                    editorViewModel.dialogState = EditorDialogState.UNSAVE_CHANGES
+
+                    AlertBottomSheetDialogFragment().show(
+                        childFragmentManager,
+                        "SaveAlertBottomSheetDialogFragment"
+                    )
                 }
                 else {
                     findNavController().navigateUp()
@@ -169,6 +173,28 @@ class EditorFragment() : MainFragment() {
                 .onFailure {
                     Toast.makeText(context, "Error occurred while deleting entry", Toast.LENGTH_SHORT).show()
                 }
+        })
+
+        alertDialogViewModel.userSelectionLiveData.consume(viewLifecycleOwner, Observer { res ->
+            when (editorViewModel.dialogState) {
+                EditorDialogState.UNSAVE_CHANGES -> {
+                    when (res) {
+                        AlertBottomSheetResponse.POSITIVE -> editorViewModel.save()
+                        AlertBottomSheetResponse.NEGATIVE -> findNavController().navigateUp()
+                    }
+                }
+                EditorDialogState.DELETE -> {
+                    when (res) {
+                        AlertBottomSheetResponse.POSITIVE -> editorViewModel.delete()
+                    }
+                }
+                else -> {
+                    throw RuntimeException("Check if editor dialog state has been properly set!")
+                }
+            }
+
+            alertDialogViewModel.reset()
+            editorViewModel.dialogState = EditorDialogState.NONE
         })
     }
     //endregion
@@ -282,17 +308,17 @@ class EditorFragment() : MainFragment() {
                 }
             }
             R.id.delete -> {
-                BottomAlertDialogFragment(
-                    "Are you sure you want to delete?",
-                    "Yes",
-                    "No",
-                    DialogInterface.OnClickListener { dialog, id ->
-                        when (id) {
-                            R.id.positive_button -> editorViewModel.delete()
-                            R.id.negative_button -> dialog.cancel()
-                        }
-                    }
-                ).show(childFragmentManager, "DeleteBottomAlertDialogFragment")
+                alertDialogViewModel.title = "Are you sure you want to delete?"
+                alertDialogViewModel.positiveButtonText = "Yes"
+                alertDialogViewModel.negativeButtonText = "No"
+                alertDialogViewModel.dismissOnNegative = true
+
+                editorViewModel.dialogState = EditorDialogState.DELETE
+
+                AlertBottomSheetDialogFragment().show(
+                    childFragmentManager,
+                    "DeleteAlertBottomSheetDialogFragment"
+                )
             }
             R.id.preview -> {
                 editorViewModel.isViewingMode = true
