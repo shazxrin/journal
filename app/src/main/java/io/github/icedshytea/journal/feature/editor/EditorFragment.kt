@@ -140,9 +140,15 @@ class EditorFragment() : MainFragment() {
                 .onSuccess {
                     Toast.makeText(context, "Entry saved!", Toast.LENGTH_SHORT).show()
 
-                    hideSoftKeyboard()
+                    if (editorViewModel.currentEntryId == null) {
+                        hideSoftKeyboard()
 
-                    findNavController().navigateUp()
+                        findNavController().navigateUp()
+                    } else {
+                        editorViewModel.isDirty = false
+
+                        showPreviewingMode()
+                    }
                 }
                 .onFailure {
                     Toast.makeText(context, "Error occurred while saving entry", Toast.LENGTH_SHORT).show()
@@ -323,39 +329,10 @@ class EditorFragment() : MainFragment() {
                 )
             }
             R.id.preview -> {
-                editorViewModel.isViewingMode = true
-
-                // Hide markdown toolbar.
-                markdown_toolbar.visibility = View.GONE
-
-                // Enable markdown rendering
-                content.setText(markwon.toMarkdown(editorViewModel.contentLiveData.value ?: ""))
-
-                disableFields()
-
-                hideSoftKeyboard()
-
-                activity?.invalidateOptionsMenu()
-                setupBottomAppBar()
+                showPreviewingMode()
             }
             R.id.edit -> {
-                editorViewModel.isViewingMode = false
-
-                // Show markdown toolbar.
-                markdown_toolbar.visibility = View.VISIBLE
-
-                // Disable markdown rendering.
-                content.setText(editorViewModel.contentLiveData.value ?: "")
-
-                enableFields()
-
-                title.requestFocus()
-                title.setSelection(title.text?.length ?: 0) // Set cursor at the back
-
-                showSoftKeyboard()
-
-                activity?.invalidateOptionsMenu()
-                setupBottomAppBar()
+                showEditingMode()
             }
             android.R.id.home -> {
                 if (!editorViewModel.isViewingMode) hideSoftKeyboard()
@@ -408,5 +385,42 @@ class EditorFragment() : MainFragment() {
             val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(view?.windowToken, 0)
         }
+    }
+
+    private fun showPreviewingMode() {
+        editorViewModel.isViewingMode = true
+
+        // Hide markdown toolbar.
+        markdown_toolbar.visibility = View.GONE
+
+        // Enable markdown rendering
+        content.setText(markwon.toMarkdown(editorViewModel.contentLiveData.value ?: ""))
+
+        disableFields()
+
+        hideSoftKeyboard()
+
+        activity?.invalidateOptionsMenu()
+        setupBottomAppBar()
+    }
+
+    private fun showEditingMode() {
+        editorViewModel.isViewingMode = false
+
+        // Show markdown toolbar.
+        markdown_toolbar.visibility = View.VISIBLE
+
+        // Disable markdown rendering.
+        content.setText(editorViewModel.contentLiveData.value ?: "")
+
+        enableFields()
+
+        title.requestFocus()
+        title.setSelection(title.text?.length ?: 0) // Set cursor at the back
+
+        showSoftKeyboard()
+
+        activity?.invalidateOptionsMenu()
+        setupBottomAppBar()
     }
 }
