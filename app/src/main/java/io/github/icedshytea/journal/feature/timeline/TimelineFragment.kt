@@ -36,6 +36,12 @@ class TimelineFragment : MainFragment(), DatePickerDialog.OnDateSetListener {
         datePickerDialogViewModel = getSharedViewModel()
 
         entryAdapter = TimelineListAdapter(markwon)
+
+        if (!timelineViewModel.hasInit) {
+            timelineViewModel.currentDate = LocalDate.now()
+
+            timelineViewModel.hasInit = true
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -69,8 +75,6 @@ class TimelineFragment : MainFragment(), DatePickerDialog.OnDateSetListener {
             )
         }
         recyclerView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-
-        timelineViewModel.currentDate = LocalDate.now()
 
         datePickerDialogViewModel.userSelectedDateLiveData.consume(viewLifecycleOwner, Observer {
                 value -> timelineViewModel.currentDate = value
