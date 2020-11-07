@@ -18,8 +18,8 @@ android {
         applicationId "io.github.icedshytea.journal"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 3
-        versionName "v3"
+        versionCode 4
+        versionName "v4"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
