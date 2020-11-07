@@ -283,16 +283,18 @@ class EditorFragment() : MainFragment() {
         inflater.inflate(R.menu.menu_editor, menu)
 
         if (editorViewModel.isViewingMode) {
-            if (!editorViewModel.isDirty) {
-                menu.findItem(R.id.save).isVisible = false
-            }
+            menu.findItem(R.id.save).isVisible = editorViewModel.isDirty
 
             menu.findItem(R.id.preview).isVisible = false
             menu.findItem(R.id.edit).isVisible = true
+
+            // Show delete icon only when entry exists
+            menu.findItem(R.id.delete).isVisible = editorViewModel.currentEntryId != null
         }
         else {
             menu.findItem(R.id.preview).isVisible = true
             menu.findItem(R.id.edit).isVisible = false
+            menu.findItem(R.id.delete).isVisible = false
         }
     }
 

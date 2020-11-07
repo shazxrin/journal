@@ -32,9 +32,6 @@ android {
             versionNameSuffix "-DEBUG"
         }
     }
-    dataBinding {
-        enabled = true
-    }
 }
 
 dependencies {

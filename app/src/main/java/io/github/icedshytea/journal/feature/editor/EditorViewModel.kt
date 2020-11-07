@@ -14,7 +14,8 @@ import java.lang.Exception
 import javax.inject.Inject
 
 class EditorViewModel @Inject constructor(private val entryRepository: EntryRepository) : ViewModel() {
-    private var currentEntryId: Int? = null
+    var currentEntryId: Int? = null
+        private set
 
     // Flags
     var hasInit = false
