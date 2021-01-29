@@ -1,6 +1,7 @@
 package io.github.icedshytea.journal.feature.timeline
 
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.widget.DatePicker
@@ -13,6 +14,7 @@ import io.github.icedshytea.journal.common.ui.actionBar
 import io.github.icedshytea.journal.feature.MainFragment
 import io.github.icedshytea.journal.common.ui.datetime.DatePickerDialogFragment
 import io.github.icedshytea.journal.common.ui.datetime.DatePickerDialogViewModel
+import io.github.icedshytea.journal.feature.settings.SettingsActivity
 import io.noties.markwon.Markwon
 import kotlinx.android.synthetic.main.fragment_timeline.*
 import org.threeten.bp.LocalDate
@@ -88,9 +90,18 @@ class TimelineFragment : MainFragment(), DatePickerDialog.OnDateSetListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.datePicker) {
-            datePickerDialogViewModel.showSelectedDate = timelineViewModel.currentDate
-            DatePickerDialogFragment().show(requireFragmentManager(), "DatePickerDialogFragment")
+        when (item.itemId) {
+             R.id.datePicker -> {
+                 datePickerDialogViewModel.showSelectedDate = timelineViewModel.currentDate
+                 DatePickerDialogFragment().show(
+                     requireFragmentManager(),
+                     "DatePickerDialogFragment"
+                 )
+             }
+            R.id.settings -> {
+                val settingsIntent = Intent(requireActivity(), SettingsActivity::class.java)
+                startActivity(settingsIntent)
+            }
         }
 
         return super.onOptionsItemSelected(item)
