@@ -10,4 +10,6 @@ interface EntryRepository {
     suspend fun delete(entryId: Int)
     suspend fun update(entry: Entry)
     suspend fun get(entryId: Int): Entry
+    suspend fun getAllEntries(limit: Int, offset: Int): List<Entry>
+    suspend fun getEntriesCount(): Int
 }

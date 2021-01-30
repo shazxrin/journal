@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
         package="io.github.icedshytea.journal">
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
     <application
             android:name=".App"
@@ -12,7 +13,7 @@
             android:theme="@style/AppTheme">
         <activity
                 android:name=".feature.settings.SettingsActivity"
-                android:label="@string/title_activity_settings"></activity>
+                android:label="@string/title_activity_settings" />
         <activity
                 android:name=".feature.MainActivity"
                 android:theme="@style/AppTheme.NoActionBar">
@@ -22,6 +23,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service android:name=".feature.settings.BackupService"/>
     </application>
 
 </manifest>

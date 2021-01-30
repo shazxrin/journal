@@ -20,4 +20,10 @@ interface EntryDAO {
 
     @Query("DELETE FROM entry WHERE id = :id")
     suspend fun delete(id: Int)
+
+    @Query("SELECT * FROM entry LIMIT :limit OFFSET :offset")
+    suspend fun getAllEntries(limit: Int, offset: Int): List<Entry>
+
+    @Query("SELECT COUNT(*) FROM entry")
+    suspend fun getEntriesCount(): Int
 }
