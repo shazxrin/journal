@@ -38,7 +38,11 @@ class BackupImportFragment : PreferenceFragmentCompat() {
                 when (resultCode) {
                     Activity.RESULT_OK -> {
                         if (data != null && data.data != null) {
-                            Toast.makeText(requireActivity(), "${data.data}", Toast.LENGTH_LONG).show()
+                            val backupServiceIntent = Intent(requireActivity(), BackupService::class.java).apply {
+                                setData(data.data)
+                            }
+
+                            requireActivity().startService(backupServiceIntent)
                         }
                     }
                     Activity.RESULT_CANCELED -> return
