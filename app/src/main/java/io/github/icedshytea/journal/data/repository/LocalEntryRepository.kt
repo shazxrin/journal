@@ -23,7 +23,5 @@ class LocalEntryRepository @Inject constructor (private val localDatabase: Local
 
     override suspend fun get(entryId: Int): Entry = localDatabase.entryDAO().get(entryId)
 
-    override suspend fun getAllEntries(limit: Int, offset: Int): List<Entry> = localDatabase.entryDAO().getAllEntries(limit, offset)
-
-    override suspend fun getEntriesCount(): Int = localDatabase.entryDAO().getEntriesCount()
+    override suspend fun getAllEntries(): List<Entry> = localDatabase.entryDAO().getAllEntries()
 }
