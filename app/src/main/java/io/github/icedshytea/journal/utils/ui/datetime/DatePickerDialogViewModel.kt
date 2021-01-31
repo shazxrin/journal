@@ -1,7 +1,7 @@
-package io.github.icedshytea.journal.common.ui.datetime
+package io.github.icedshytea.journal.utils.ui.datetime
 
 import androidx.lifecycle.ViewModel
-import io.github.icedshytea.journal.common.data.ConsumableLiveData
+import io.github.icedshytea.journal.utils.data.ConsumableLiveData
 import org.threeten.bp.LocalDate
 import javax.inject.Inject
 

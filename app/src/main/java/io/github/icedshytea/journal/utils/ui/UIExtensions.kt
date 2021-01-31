@@ -1,4 +1,4 @@
-package io.github.icedshytea.journal.common.ui
+package io.github.icedshytea.journal.utils.ui
 
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity

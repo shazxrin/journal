@@ -1,4 +1,4 @@
-package io.github.icedshytea.journal.common.data
+package io.github.icedshytea.journal.utils.data
 
 class Result private constructor() {
     private var throwable: Throwable? = null

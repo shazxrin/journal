@@ -3,8 +3,8 @@ package io.github.icedshytea.journal.feature.editor
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.github.icedshytea.journal.common.data.Result
-import io.github.icedshytea.journal.common.data.ConsumableLiveData
+import io.github.icedshytea.journal.utils.data.Result
+import io.github.icedshytea.journal.utils.data.ConsumableLiveData
 import io.github.icedshytea.journal.data.entity.Entry
 import io.github.icedshytea.journal.data.repository.EntryRepository
 import kotlinx.coroutines.Dispatchers

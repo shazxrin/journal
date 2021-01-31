@@ -1,4 +1,4 @@
-package io.github.icedshytea.journal.common.data
+package io.github.icedshytea.journal.utils.data
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData

@@ -1,4 +1,4 @@
-package io.github.icedshytea.journal.common.ui.datetime
+package io.github.icedshytea.journal.utils.ui.datetime
 
 import android.content.Context
 import androidx.fragment.app.DialogFragment
