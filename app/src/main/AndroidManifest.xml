@@ -12,7 +12,7 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
         <activity
-                android:name=".feature.settings.SettingsActivity"
+                android:name="io.github.icedshytea.journal.settings.SettingsActivity"
                 android:label="@string/title_activity_settings" />
         <activity
                 android:name=".feature.MainActivity"
@@ -23,8 +23,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".feature.settings.BackupService"/>
-        <service android:name=".feature.settings.ImportService"/>
+        <service android:name="io.github.icedshytea.journal.settings.BackupService"/>
+        <service android:name="io.github.icedshytea.journal.settings.ImportService"/>
     </application>
 
 </manifest>

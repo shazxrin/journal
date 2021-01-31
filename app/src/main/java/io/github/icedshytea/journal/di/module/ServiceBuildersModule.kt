@@ -2,8 +2,8 @@ package io.github.icedshytea.journal.di.module
 
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
-import io.github.icedshytea.journal.feature.settings.BackupService
-import io.github.icedshytea.journal.feature.settings.ImportService
+import io.github.icedshytea.journal.settings.BackupService
+import io.github.icedshytea.journal.settings.ImportService
 
 @Module
 abstract class ServiceBuildersModule {
