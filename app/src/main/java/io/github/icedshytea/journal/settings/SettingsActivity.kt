@@ -1,4 +1,4 @@
-package io.github.icedshytea.journal.feature.settings
+package io.github.icedshytea.journal.settings
 
 import android.os.Bundle
 import android.view.MenuItem

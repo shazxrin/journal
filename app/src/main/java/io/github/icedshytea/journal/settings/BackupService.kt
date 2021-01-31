@@ -1,4 +1,4 @@
-package io.github.icedshytea.journal.feature.settings
+package io.github.icedshytea.journal.settings
 
 import android.app.*
 import android.content.Context
@@ -10,7 +10,6 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.android.DaggerService
 import io.github.icedshytea.journal.R
-import io.github.icedshytea.journal.data.entity.Entry
 import io.github.icedshytea.journal.data.json.BackupJSON
 import io.github.icedshytea.journal.data.json.EntryJSONAdapter
 import io.github.icedshytea.journal.data.repository.EntryRepository

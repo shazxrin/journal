@@ -14,7 +14,7 @@ import io.github.icedshytea.journal.common.ui.actionBar
 import io.github.icedshytea.journal.feature.MainFragment
 import io.github.icedshytea.journal.common.ui.datetime.DatePickerDialogFragment
 import io.github.icedshytea.journal.common.ui.datetime.DatePickerDialogViewModel
-import io.github.icedshytea.journal.feature.settings.SettingsActivity
+import io.github.icedshytea.journal.settings.SettingsActivity
 import io.noties.markwon.Markwon
 import kotlinx.android.synthetic.main.fragment_timeline.*
 import org.threeten.bp.LocalDate
