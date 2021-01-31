@@ -1,6 +1,8 @@
 package io.github.icedshytea.journal.feature.settings
 
-import android.app.*
+import android.app.Notification
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -10,18 +12,20 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.android.DaggerService
 import io.github.icedshytea.journal.R
-import io.github.icedshytea.journal.data.entity.Entry
 import io.github.icedshytea.journal.data.json.BackupJSON
 import io.github.icedshytea.journal.data.json.EntryJSONAdapter
 import io.github.icedshytea.journal.data.repository.EntryRepository
 import io.github.icedshytea.journal.feature.MainActivity
 import io.github.icedshytea.journal.utils.notification.NotificationHelper
-import kotlinx.coroutines.*
-import java.io.BufferedWriter
-import java.io.OutputStreamWriter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import java.io.BufferedReader
+import java.io.InputStreamReader
 import javax.inject.Inject
 
-class BackupService : DaggerService() {
+class ImportService : DaggerService() {
     @Inject
     lateinit var entryRepository: EntryRepository
 
@@ -44,22 +48,22 @@ class BackupService : DaggerService() {
         }
 
         val notificationForeground: Notification = NotificationCompat.Builder(this, channelId)
-            .setContentTitle("Backing up")
-            .setContentText("Exporting entries to JSON.")
+            .setContentTitle("Importing backup")
+            .setContentText("Importing entries from JSON backup.")
             .setSmallIcon(R.drawable.ic_backup_import)
             .setContentIntent(pendingIntent)
-            .setTicker("Backing up")
+            .setTicker("Importing backup")
             .build()
 
         val notificationCompleted: Notification = NotificationCompat.Builder(this, channelId)
-            .setContentTitle("Backup successful")
-            .setContentText("Entries successful exported.")
+            .setContentTitle("Import successful")
+            .setContentText("Backup successful imported.")
             .setSmallIcon(R.drawable.ic_backup_import)
-            .setTicker("Backup successful")
+            .setTicker("Import successful")
             .build()
 
         startForeground(
-            NotificationHelper.BackupImport.BACKUP_ONGOING_NOTIF_ID,
+            NotificationHelper.BackupImport.IMPORT_ONGOING_NOTIF_ID,
             notificationForeground
         )
 
@@ -67,29 +71,30 @@ class BackupService : DaggerService() {
             serviceScope.launch {
                 val fileURI = intent.data!!
 
-                val fileOutputStream = contentResolver.openOutputStream(fileURI)
-                val writer = BufferedWriter(OutputStreamWriter(fileOutputStream))
+                val fileOutputStream = contentResolver.openInputStream(fileURI)
+                val reader = BufferedReader(InputStreamReader(fileOutputStream))
                 val moshi = Moshi.Builder()
                     .add(EntryJSONAdapter())
                     .addLast(KotlinJsonAdapterFactory())
                     .build()
                 val jsonAdapter = moshi.adapter(BackupJSON::class.java)
 
-                val entries = entryRepository.getAllEntries()
-                val backupJSON = BackupJSON(data = entries)
+                val json = reader.readText()
 
-                val json = jsonAdapter.toJson(backupJSON)
+                val backupJSON = jsonAdapter.fromJson(json)
+                reader.close()
 
-                writer.write(json)
-                writer.flush()
-                writer.close()
-
+                if (backupJSON != null) {
+                    for (e in backupJSON.data) {
+                        entryRepository.insert(e)
+                    }
+                }
             }.invokeOnCompletion {
                 stopForeground(true)
 
                 val service = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 service.notify(
-                    NotificationHelper.BackupImport.BACKUP_COMPLETED_NOTIF_ID,
+                    NotificationHelper.BackupImport.IMPORT_COMPLETED_NOTIF_ID,
                     notificationCompleted
                 )
 
@@ -98,12 +103,6 @@ class BackupService : DaggerService() {
         }
 
         return START_NOT_STICKY
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        serviceScope.cancel()
     }
 
     override fun onBind(intent: Intent?): IBinder? = null

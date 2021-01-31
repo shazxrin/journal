@@ -4,4 +4,8 @@
             android:key="backupToJSON"
             android:title="Backup to JSON"
             android:summary="Export all entries to local storage in JSON format."/>
+    <Preference
+            android:key="importFromJSON"
+            android:title="Import from JSON backup"
+            android:summary="Import entries from a JSON backup."/>
 </PreferenceScreen>
