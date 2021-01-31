@@ -1,4 +1,4 @@
-package io.github.icedshytea.journal.data
+package io.github.icedshytea.journal.data.local
 
 import androidx.room.TypeConverter
 import org.threeten.bp.LocalDateTime
