@@ -1,7 +1,6 @@
 package io.github.icedshytea.journal.feature.editor
 
 import android.content.Context
-import android.content.DialogInterface
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.*
@@ -14,16 +13,16 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.icedshytea.journal.R
-import io.github.icedshytea.journal.common.ui.actionBar
+import io.github.icedshytea.journal.utils.ui.actionBar
 import io.github.icedshytea.journal.feature.MainFragment
-import io.github.icedshytea.journal.common.ui.alert.AlertBottomSheetDialogFragment
-import io.github.icedshytea.journal.common.ui.alert.AlertBottomSheetDialogViewModel
-import io.github.icedshytea.journal.common.ui.alert.AlertBottomSheetResponse
-import io.github.icedshytea.journal.common.ui.datetime.DatePickerDialogFragment
-import io.github.icedshytea.journal.common.ui.datetime.DatePickerDialogViewModel
+import io.github.icedshytea.journal.utils.ui.alert.AlertBottomSheetDialogFragment
+import io.github.icedshytea.journal.utils.ui.alert.AlertBottomSheetDialogViewModel
+import io.github.icedshytea.journal.utils.ui.alert.AlertBottomSheetResponse
+import io.github.icedshytea.journal.utils.ui.datetime.DatePickerDialogFragment
+import io.github.icedshytea.journal.utils.ui.datetime.DatePickerDialogViewModel
 import io.github.icedshytea.journal.utils.datetime.DateTimeHelper
-import io.github.icedshytea.journal.common.ui.datetime.TimePickerDialogFragment
-import io.github.icedshytea.journal.common.ui.datetime.TimePickerDialogViewModel
+import io.github.icedshytea.journal.utils.ui.datetime.TimePickerDialogFragment
+import io.github.icedshytea.journal.utils.ui.datetime.TimePickerDialogViewModel
 import io.noties.markwon.Markwon
 import kotlinx.android.synthetic.main.fragment_editor.*
 import org.threeten.bp.LocalDate

@@ -1,11 +1,10 @@
-package io.github.icedshytea.journal.common.ui.alert
+package io.github.icedshytea.journal.utils.ui.alert
 
 import android.content.Context
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.AndroidSupportInjection

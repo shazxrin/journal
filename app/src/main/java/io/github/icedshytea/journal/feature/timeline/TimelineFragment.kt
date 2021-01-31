@@ -10,10 +10,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.android.material.bottomappbar.BottomAppBar
 import io.github.icedshytea.journal.R
-import io.github.icedshytea.journal.common.ui.actionBar
+import io.github.icedshytea.journal.utils.ui.actionBar
 import io.github.icedshytea.journal.feature.MainFragment
-import io.github.icedshytea.journal.common.ui.datetime.DatePickerDialogFragment
-import io.github.icedshytea.journal.common.ui.datetime.DatePickerDialogViewModel
+import io.github.icedshytea.journal.utils.ui.datetime.DatePickerDialogFragment
+import io.github.icedshytea.journal.utils.ui.datetime.DatePickerDialogViewModel
 import io.github.icedshytea.journal.settings.SettingsActivity
 import io.noties.markwon.Markwon
 import kotlinx.android.synthetic.main.fragment_timeline.*

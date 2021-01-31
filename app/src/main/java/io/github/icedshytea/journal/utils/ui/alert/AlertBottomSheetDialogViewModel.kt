@@ -1,7 +1,7 @@
-package io.github.icedshytea.journal.common.ui.alert
+package io.github.icedshytea.journal.utils.ui.alert
 
 import androidx.lifecycle.ViewModel
-import io.github.icedshytea.journal.common.data.ConsumableLiveData
+import io.github.icedshytea.journal.utils.data.ConsumableLiveData
 import javax.inject.Inject
 
 enum class AlertBottomSheetResponse { POSITIVE, NEGATIVE }
