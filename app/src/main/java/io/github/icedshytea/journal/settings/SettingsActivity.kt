@@ -30,7 +30,7 @@ class SettingsActivity : AppCompatActivity(),
         }
         supportFragmentManager.addOnBackStackChangedListener {
             if (supportFragmentManager.backStackEntryCount == 0) {
-                setTitle(R.string.title_activity_settings)
+                setTitle(R.string.title_settings)
             }
         }
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -38,6 +38,7 @@ class SettingsActivity : AppCompatActivity(),
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+
         // Save current activity title so we can set it again after a configuration change
         outState.putCharSequence(TITLE_TAG, title)
     }
@@ -46,6 +47,7 @@ class SettingsActivity : AppCompatActivity(),
         if (supportFragmentManager.popBackStackImmediate()) {
             return true
         }
+
         return super.onSupportNavigateUp()
     }
 
@@ -84,9 +86,8 @@ class SettingsActivity : AppCompatActivity(),
             android.R.id.home -> {
                 onBackPressed()
 
-                findViewById<TextView>(R.id.title).text = "Settings"
+                findViewById<TextView>(R.id.title).text = getString(R.string.title_settings)
             }
-
         }
 
         return super.onOptionsItemSelected(item)

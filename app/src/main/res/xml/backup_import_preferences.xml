@@ -2,10 +2,10 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <Preference
             android:key="backupToJSON"
-            android:title="Backup to JSON"
-            android:summary="Export all entries to local storage in JSON format."/>
+            android:title="@string/pref_title_backup_json"
+            android:summary="@string/pref_summary_backup_json"/>
     <Preference
             android:key="importFromJSON"
-            android:title="Import from JSON backup"
-            android:summary="Import entries from a JSON backup."/>
+            android:title="@string/pref_title_import_json"
+            android:summary="@string/pref_summary_import_json"/>
 </PreferenceScreen>
