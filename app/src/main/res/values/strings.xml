@@ -1,6 +1,22 @@
 <resources>
     <string name="app_name">Journal</string>
 
+    <!--  Editor/Viewer  -->
+    <string name="alert_title_save">Do you want to save or discard changes?</string>
+    <string name="alert_positive_save">Save</string>
+    <string name="alert_negative_save">Discard</string>
+
+    <string name="alert_title_delete">Are you sure you want to delete?</string>
+    <string name="alert_positive_delete">Yes</string>
+    <string name="alert_negative_delete">No</string>
+
+    <string name="toast_entry_saved">Entry saved!</string>
+    <string name="toast_entry_save_error">Error occurred while saving entry</string>
+    <string name="toast_entry_load_error">Failed to load entry</string>
+    <string name="toast_entry_deleted">Entry deleted!</string>
+    <string name="toast_entry_delete_error">Error occurred while deleting entry</string>
+    <string name="toast_entry_empty_error">Cannot save entry with empty fields!</string>
+
     <!--  Settings  -->
     <string name="title_activity_settings">Settings</string>
     <string name="title_settings">Settings</string>
