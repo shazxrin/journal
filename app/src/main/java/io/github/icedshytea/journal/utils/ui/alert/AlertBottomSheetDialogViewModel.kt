@@ -8,9 +8,9 @@ enum class AlertBottomSheetResponse { POSITIVE, NEGATIVE }
 
 class AlertBottomSheetDialogViewModel @Inject constructor() : ViewModel() {
     // Settings.
-    var title: String = ""
-    var positiveButtonText: String = ""
-    var negativeButtonText: String = ""
+    var title: CharSequence = ""
+    var positiveButtonText: CharSequence = ""
+    var negativeButtonText: CharSequence = ""
     var dismissOnNegative: Boolean = false
 
     // Live Data.

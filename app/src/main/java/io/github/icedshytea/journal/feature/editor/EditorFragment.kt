@@ -73,9 +73,9 @@ class EditorFragment() : MainFragment() {
         requireActivity().onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (editorViewModel.isDirty) {
-                    alertDialogViewModel.title = "Do you want to save or discard changes?"
-                    alertDialogViewModel.positiveButtonText = "Save"
-                    alertDialogViewModel.negativeButtonText = "Discard"
+                    alertDialogViewModel.title = getText(R.string.alert_title_save)
+                    alertDialogViewModel.positiveButtonText = getText(R.string.alert_positive_save)
+                    alertDialogViewModel.negativeButtonText = getText(R.string.alert_negative_save)
 
                     editorViewModel.dialogState = EditorDialogState.UNSAVE_CHANGES
 
@@ -137,7 +137,7 @@ class EditorFragment() : MainFragment() {
         editorViewModel.saveResultLiveData.consume(viewLifecycleOwner, Observer { status ->
             status
                 .onSuccess {
-                    Toast.makeText(context, "Entry saved!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, getText(R.string.toast_entry_saved), Toast.LENGTH_SHORT).show()
 
                     if (editorViewModel.currentEntryId == null) {
                         hideSoftKeyboard()
@@ -150,7 +150,7 @@ class EditorFragment() : MainFragment() {
                     }
                 }
                 .onFailure {
-                    Toast.makeText(context, "Error occurred while saving entry", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, getText(R.string.toast_entry_save_error), Toast.LENGTH_SHORT).show()
                 }
         })
 
@@ -164,19 +164,19 @@ class EditorFragment() : MainFragment() {
                     content.setText(if (editorViewModel.isViewingMode) markwon.toMarkdown(contentValue) else contentValue)
                 }
                 .onFailure {
-                    Toast.makeText(context, "Failed to load entry", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, getText(R.string.toast_entry_load_error), Toast.LENGTH_SHORT).show()
                 }
         })
 
         editorViewModel.deleteResultLiveData.consume(viewLifecycleOwner, Observer { status ->
             status
                 .onSuccess {
-                    Toast.makeText(context, "Entry deleted!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, getText(R.string.toast_entry_deleted), Toast.LENGTH_SHORT).show()
 
                     findNavController().navigateUp()
                 }
                 .onFailure {
-                    Toast.makeText(context, "Error occurred while deleting entry", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, getText(R.string.toast_entry_delete_error), Toast.LENGTH_SHORT).show()
                 }
         })
 
@@ -308,16 +308,16 @@ class EditorFragment() : MainFragment() {
             R.id.save -> {
                 if (editorViewModel.titleLiveData.value?.length == 0
                     || editorViewModel.contentLiveData.value?.length == 0) {
-                    Toast.makeText(requireContext(), "Cannot save entry with empty fields!", Toast.LENGTH_LONG)
+                    Toast.makeText(requireContext(), getText(R.string.toast_entry_empty_error), Toast.LENGTH_LONG)
                         .show()
                 } else {
                     editorViewModel.save()
                 }
             }
             R.id.delete -> {
-                alertDialogViewModel.title = "Are you sure you want to delete?"
-                alertDialogViewModel.positiveButtonText = "Yes"
-                alertDialogViewModel.negativeButtonText = "No"
+                alertDialogViewModel.title = getText(R.string.alert_title_delete)
+                alertDialogViewModel.positiveButtonText = getText(R.string.alert_positive_delete)
+                alertDialogViewModel.negativeButtonText = getText(R.string.alert_negative_delete)
                 alertDialogViewModel.dismissOnNegative = true
 
                 editorViewModel.dialogState = EditorDialogState.DELETE
