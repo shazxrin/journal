@@ -103,7 +103,7 @@ class TimelineListAdapter(private val markwon: Markwon)
 
         fun bind(date: LocalDate) {
             if (date.isEqual(LocalDate.now())) {
-                dayTextView.text = "Today"
+                dayTextView.text = view.context.getText(R.string.list_item_timeline_today)
             }
             else {
                 dayTextView.text = date.format(DateTimeFormatter.ofPattern("dd MMMM yyyy"))

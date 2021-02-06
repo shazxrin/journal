@@ -32,7 +32,7 @@
 					android:layout_height="wrap_content"
 					android:background="@android:color/transparent"
 					android:focusable="true"
-					android:hint="Title"
+					android:hint="@string/layout_editor_entry_title_hint"
 					android:nextFocusDown="@id/content"
 					app:fontFamily="@font/vollkorn" />
 
@@ -78,7 +78,7 @@
 					android:background="@android:color/transparent"
 					android:focusable="true"
 					android:gravity="start"
-					android:hint="Content"
+					android:hint="@string/layout_editor_entry_content_hint"
 					android:inputType="textMultiLine"
 					app:fontFamily="@font/libre_baskerville" />
 		</LinearLayout>
