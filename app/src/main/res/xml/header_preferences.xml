@@ -1,6 +1,6 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
     <Preference
-            app:fragment="io.github.icedshytea.journal.settings.BackupImportFragment"
+            app:fragment="io.github.kosumorin.journal.settings.BackupImportFragment"
             app:icon="@drawable/ic_backup_import"
             app:key="backup_import_header"
             app:title="@string/title_settings_backup_import" />

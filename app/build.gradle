@@ -15,7 +15,7 @@ android {
     }
     compileSdkVersion 30
     defaultConfig {
-        applicationId "io.github.icedshytea.journal"
+        applicationId "io.github.kosumorin.journal"
         minSdkVersion 23
         targetSdkVersion 30
         versionCode 5
