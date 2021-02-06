@@ -4,28 +4,28 @@
             android:id="@+id/delete"
             android:icon="@drawable/ic_delete"
             app:iconTint="?attr/colorOnSurface"
-            android:title="Delete"
+            android:title="@string/menu_item_editor_delete"
             app:showAsAction="ifRoom">
     </item>
     <item
             android:id="@+id/edit"
             android:icon="@drawable/ic_edit"
             app:iconTint="?attr/colorOnSurface"
-            android:title="Edit"
+            android:title="@string/menu_item_editor_edit"
             app:showAsAction="ifRoom">
     </item>
     <item
             android:id="@+id/preview"
             android:icon="@drawable/ic_preview"
             app:iconTint="?attr/colorOnSurface"
-            android:title="Preview"
+            android:title="@string/menu_item_editor_preview"
             app:showAsAction="ifRoom">
     </item>
     <item
             android:id="@+id/save"
             android:icon="@drawable/ic_check"
             app:iconTint="?attr/colorOnSurface"
-            android:title="Save"
+            android:title="@string/menu_item_editor_save"
             app:showAsAction="ifRoom">
     </item>
 </menu>
