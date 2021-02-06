@@ -56,7 +56,7 @@ class TimelineFragment : MainFragment(), DatePickerDialog.OnDateSetListener {
         setupBottomAppBar()
         fabBottomAppBar?.setOnClickListener {
             findNavController().navigate(
-                TimelineFragmentDirections.timelineOpenEditorAction()
+                TimelineFragmentDirections.timelineOpenEditorAction(null)
             )
         }
 

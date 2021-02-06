@@ -14,7 +14,7 @@ import java.lang.Exception
 import javax.inject.Inject
 
 class EditorViewModel @Inject constructor(private val entryRepository: EntryRepository) : ViewModel() {
-    var currentEntryId: Int? = null
+    var currentEntryId: String? = null
         private set
 
     // Flags
@@ -34,8 +34,14 @@ class EditorViewModel @Inject constructor(private val entryRepository: EntryRepo
 
     // Actions.
     fun save() {
-        val entry = Entry(
-            currentEntryId ?: 0,
+        val entryId = currentEntryId
+
+        val entry = if (entryId != null) Entry(
+            entryId,
+            titleLiveData.value ?: "",
+            contentLiveData.value ?: "",
+            dateTimeLiveData.value ?: LocalDateTime.now()
+        ) else Entry(
             titleLiveData.value ?: "",
             contentLiveData.value ?: "",
             dateTimeLiveData.value ?: LocalDateTime.now()
@@ -43,7 +49,7 @@ class EditorViewModel @Inject constructor(private val entryRepository: EntryRepo
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                if (currentEntryId == null) {
+                if (entryId == null) {
                     entryRepository.insert(entry)
                 }
                 else {
@@ -58,7 +64,7 @@ class EditorViewModel @Inject constructor(private val entryRepository: EntryRepo
         }
     }
 
-    fun load(entryId: Int) {
+    fun load(entryId: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val entry = entryRepository.get(entryId)

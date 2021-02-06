@@ -17,11 +17,11 @@ class LocalEntryRepository @Inject constructor (private val localDatabase: Local
 
     override suspend fun insert(entry: Entry) = localDatabase.entryDAO().insert(entry)
 
-    override suspend fun delete(entryId: Int) = localDatabase.entryDAO().delete(entryId)
+    override suspend fun delete(entryId: String) = localDatabase.entryDAO().delete(entryId)
 
     override suspend fun update(entry: Entry) = localDatabase.entryDAO().update(entry)
 
-    override suspend fun get(entryId: Int): Entry = localDatabase.entryDAO().get(entryId)
+    override suspend fun get(entryId: String): Entry = localDatabase.entryDAO().get(entryId)
 
     override suspend fun getAllEntries(): List<Entry> = localDatabase.entryDAO().getAllEntries()
 }

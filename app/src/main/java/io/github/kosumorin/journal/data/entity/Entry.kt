@@ -4,10 +4,11 @@ import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import org.threeten.bp.LocalDateTime
+import java.util.*
 
 @Entity
 data class Entry(
-    @PrimaryKey(autoGenerate = true) val id: Int,
+    @PrimaryKey val id: String,
     var title: String,
     var content: String,
     val dateTime: LocalDateTime
@@ -18,7 +19,7 @@ data class Entry(
         content: String,
         dateTime: LocalDateTime
     ) : this(
-        0,
+        UUID.randomUUID().toString(),
         title,
         content,
         dateTime

@@ -55,11 +55,12 @@ class EditorFragment() : MainFragment() {
         alertDialogViewModel = getSharedViewModel()
 
         if (!editorViewModel.hasInit) {
-            editorViewModel.isViewingMode = args.entryId != -1
-
             // Load entry by id (view mode).
-            if (editorViewModel.isViewingMode) {
-                editorViewModel.load(args.entryId)
+            val entryId = args.entryId
+            if (entryId != null) {
+                editorViewModel.isViewingMode = true
+
+                editorViewModel.load(entryId)
             }
 
             editorViewModel.hasInit = true

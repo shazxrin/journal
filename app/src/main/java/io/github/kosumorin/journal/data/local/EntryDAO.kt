@@ -10,7 +10,7 @@ interface EntryDAO {
     fun getEntriesSorted(isoDateFormat: String): Flow<List<Entry>>
 
     @Query("SELECT * FROM entry WHERE id = :id")
-    suspend fun get(id: Int): Entry
+    suspend fun get(id: String): Entry
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(entry: Entry)
@@ -19,7 +19,7 @@ interface EntryDAO {
     suspend fun update(entry: Entry)
 
     @Query("DELETE FROM entry WHERE id = :id")
-    suspend fun delete(id: Int)
+    suspend fun delete(id: String)
 
     @Query("SELECT * FROM entry")
     suspend fun getAllEntries(): List<Entry>
