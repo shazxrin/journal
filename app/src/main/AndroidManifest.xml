@@ -23,8 +23,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name="io.github.kosumorin.journal.settings.BackupService"/>
-        <service android:name="io.github.kosumorin.journal.settings.ImportService"/>
+        <service android:name="io.github.kosumorin.journal.settings.backupimport.BackupService"/>
+        <service android:name="io.github.kosumorin.journal.settings.backupimport.ImportService"/>
     </application>
 
 </manifest>

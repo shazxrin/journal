@@ -1,4 +1,4 @@
-package io.github.kosumorin.journal.settings
+package io.github.kosumorin.journal.settings.backupimport
 
 import android.app.Notification
 import android.app.NotificationManager

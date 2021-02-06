@@ -1,4 +1,4 @@
-package io.github.kosumorin.journal.settings
+package io.github.kosumorin.journal.settings.backupimport
 
 import android.app.Activity
 import android.content.Intent
