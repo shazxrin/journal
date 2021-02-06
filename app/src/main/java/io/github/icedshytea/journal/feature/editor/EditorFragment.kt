@@ -73,9 +73,9 @@ class EditorFragment() : MainFragment() {
         requireActivity().onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (editorViewModel.isDirty) {
-                    alertDialogViewModel.title = getText(R.string.alert_title_save)
-                    alertDialogViewModel.positiveButtonText = getText(R.string.alert_positive_save)
-                    alertDialogViewModel.negativeButtonText = getText(R.string.alert_negative_save)
+                    alertDialogViewModel.title = getText(R.string.alert_editor_save_title)
+                    alertDialogViewModel.positiveButtonText = getText(R.string.alert_editor_save_positive)
+                    alertDialogViewModel.negativeButtonText = getText(R.string.alert_editor_save_negative)
 
                     editorViewModel.dialogState = EditorDialogState.UNSAVE_CHANGES
 
@@ -137,7 +137,7 @@ class EditorFragment() : MainFragment() {
         editorViewModel.saveResultLiveData.consume(viewLifecycleOwner, Observer { status ->
             status
                 .onSuccess {
-                    Toast.makeText(context, getText(R.string.toast_entry_saved), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, getText(R.string.toast_editor_entry_saved), Toast.LENGTH_SHORT).show()
 
                     if (editorViewModel.currentEntryId == null) {
                         hideSoftKeyboard()
@@ -150,7 +150,7 @@ class EditorFragment() : MainFragment() {
                     }
                 }
                 .onFailure {
-                    Toast.makeText(context, getText(R.string.toast_entry_save_error), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, getText(R.string.toast_editor_entry_save_error), Toast.LENGTH_SHORT).show()
                 }
         })
 
@@ -164,19 +164,19 @@ class EditorFragment() : MainFragment() {
                     content.setText(if (editorViewModel.isViewingMode) markwon.toMarkdown(contentValue) else contentValue)
                 }
                 .onFailure {
-                    Toast.makeText(context, getText(R.string.toast_entry_load_error), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, getText(R.string.toast_editor_entry_load_error), Toast.LENGTH_SHORT).show()
                 }
         })
 
         editorViewModel.deleteResultLiveData.consume(viewLifecycleOwner, Observer { status ->
             status
                 .onSuccess {
-                    Toast.makeText(context, getText(R.string.toast_entry_deleted), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, getText(R.string.toast_editor_entry_deleted), Toast.LENGTH_SHORT).show()
 
                     findNavController().navigateUp()
                 }
                 .onFailure {
-                    Toast.makeText(context, getText(R.string.toast_entry_delete_error), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, getText(R.string.toast_editor_entry_delete_error), Toast.LENGTH_SHORT).show()
                 }
         })
 
@@ -308,16 +308,16 @@ class EditorFragment() : MainFragment() {
             R.id.save -> {
                 if (editorViewModel.titleLiveData.value?.length == 0
                     || editorViewModel.contentLiveData.value?.length == 0) {
-                    Toast.makeText(requireContext(), getText(R.string.toast_entry_empty_error), Toast.LENGTH_LONG)
+                    Toast.makeText(requireContext(), getText(R.string.toast_editor_entry_empty_error), Toast.LENGTH_LONG)
                         .show()
                 } else {
                     editorViewModel.save()
                 }
             }
             R.id.delete -> {
-                alertDialogViewModel.title = getText(R.string.alert_title_delete)
-                alertDialogViewModel.positiveButtonText = getText(R.string.alert_positive_delete)
-                alertDialogViewModel.negativeButtonText = getText(R.string.alert_negative_delete)
+                alertDialogViewModel.title = getText(R.string.alert_editor_delete_title)
+                alertDialogViewModel.positiveButtonText = getText(R.string.alert_editor_delete_positive)
+                alertDialogViewModel.negativeButtonText = getText(R.string.alert_editor_delete_negative)
                 alertDialogViewModel.dismissOnNegative = true
 
                 editorViewModel.dialogState = EditorDialogState.DELETE
