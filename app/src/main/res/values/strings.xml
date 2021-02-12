@@ -32,6 +32,7 @@
 
     <string name="layout_editor_entry_title_hint">Title</string>
     <string name="layout_editor_entry_content_hint">Content</string>
+    <string name="layout_editor_entry_tags_hint">Tags</string>
 
     <!--  Settings  -->
     <string name="title_activity_settings">Settings</string>
