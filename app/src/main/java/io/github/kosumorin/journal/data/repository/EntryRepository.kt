@@ -1,7 +1,9 @@
 package io.github.kosumorin.journal.data.repository
 
 import io.github.kosumorin.journal.data.entity.Entry
+import io.github.kosumorin.journal.data.entity.EntryTag
 import io.github.kosumorin.journal.data.entity.EntryWithMetadata
+import io.github.kosumorin.journal.data.entity.Tag
 import io.github.kosumorin.journal.data.local.LocalDatabase
 import kotlinx.coroutines.flow.Flow
 import org.threeten.bp.LocalDate
@@ -17,6 +19,7 @@ interface EntryRepository {
     suspend fun get(entryId: String): Entry
     suspend fun getAllEntries(): List<Entry>
     suspend fun getWithMetadata(entryId: String): EntryWithMetadata
+    suspend fun insertWithMetadata(entry: Entry, tags: List<Tag>)
 }
 
 @Singleton
@@ -38,4 +41,14 @@ class LocalEntryRepository @Inject constructor (private val localDatabase: Local
 
     override suspend fun getWithMetadata(entryId: String): EntryWithMetadata
         = localDatabase.entryDAO().getWithMetadata(entryId)
+
+    override suspend fun insertWithMetadata(entry: Entry, tags: List<Tag>) {
+        localDatabase.entryDAO().insert(entry)
+
+        for (tag in tags) {
+            localDatabase.tagDAO().insert(tag)
+
+            localDatabase.entryTagDAO().insert(EntryTag(entryId = entry.entryId, tagId = tag.tagId))
+        }
+    }
 }

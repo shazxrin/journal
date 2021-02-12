@@ -4,11 +4,8 @@ import android.app.Application
 import androidx.room.Room
 import dagger.Module
 import dagger.Provides
-import io.github.kosumorin.journal.data.repository.EntryRepository
-import io.github.kosumorin.journal.data.repository.LocalEntryRepository
 import io.github.kosumorin.journal.data.local.LocalDatabase
-import io.github.kosumorin.journal.data.repository.LocalTagRepository
-import io.github.kosumorin.journal.data.repository.TagRepository
+import io.github.kosumorin.journal.data.repository.*
 import javax.inject.Singleton
 
 @Module
@@ -30,6 +27,14 @@ class DataModule {
     @Provides
     fun provideTagRepository(localDatabase: LocalDatabase): TagRepository {
         return LocalTagRepository(
+            localDatabase
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun provideEntryTagRepository(localDatabase: LocalDatabase): EntryTagRepository {
+        return LocalEntryTagRepository(
             localDatabase
         )
     }

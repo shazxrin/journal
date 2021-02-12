@@ -16,4 +16,7 @@ interface TagDAO {
 
     @Query("DELETE FROM tag WHERE tagId  = :id")
     suspend fun delete(id: String)
+
+    @Query("SELECT * FROM tag")
+    suspend fun getAll(): List<Tag>
 }

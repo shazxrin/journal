@@ -10,6 +10,7 @@ interface TagRepository {
     suspend fun delete(tagId: String)
     suspend fun update(tag: Tag)
     suspend fun get(tagId: String): Tag
+    suspend fun getAll(): List<Tag>
 }
 
 @Singleton
@@ -22,4 +23,6 @@ class LocalTagRepository @Inject constructor (private val localDatabase: LocalDa
     override suspend fun update(tag: Tag) = localDatabase.tagDAO().update(tag)
 
     override suspend fun get(tagId: String): Tag = localDatabase.tagDAO().get(tagId)
+
+    override suspend fun getAll(): List<Tag> = localDatabase.tagDAO().getAll()
 }

@@ -9,6 +9,6 @@ data class EntryWithMetadata(
     @Relation(
         parentColumn = "entryId",
         entityColumn = "tagId",
-        associateBy = Junction(EntryTagCrossRef::class)
+        associateBy = Junction(EntryTag::class)
     ) val tags: List<Tag>
 )
