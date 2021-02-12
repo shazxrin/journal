@@ -73,7 +73,7 @@ class TimelineFragment : MainFragment(), DatePickerDialog.OnDateSetListener {
         })
         entryAdapter.setOnEntryItemClicked {
             findNavController().navigate(
-                TimelineFragmentDirections.timelineOpenEditorAction(it.id)
+                TimelineFragmentDirections.timelineOpenEditorAction(it.entryId)
             )
         }
         recyclerView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))

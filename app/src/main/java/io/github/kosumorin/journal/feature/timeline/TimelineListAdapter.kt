@@ -79,7 +79,7 @@ class TimelineListAdapter(private val markwon: Markwon)
     class TimelineListItemDiffCallback : DiffUtil.ItemCallback<TimelineListItem>() {
         override fun areItemsTheSame(oldItem: TimelineListItem, newItem: TimelineListItem): Boolean {
             return if (oldItem is TimelineListEntryItem && newItem is TimelineListEntryItem) {
-                oldItem.entry.id == newItem.entry.id
+                oldItem.entry.entryId == newItem.entry.entryId
             } else if (oldItem is TimelineListHeader && newItem is TimelineListHeader) {
                 oldItem.date == newItem.date
             } else {

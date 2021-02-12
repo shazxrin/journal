@@ -8,7 +8,7 @@ import java.util.*
 
 @Entity
 data class Entry(
-    @PrimaryKey val id: String,
+    @PrimaryKey val entryId: String,
     var title: String,
     var content: String,
     val dateTime: LocalDateTime

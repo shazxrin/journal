@@ -1,6 +1,7 @@
 package io.github.kosumorin.journal.data.repository
 
 import io.github.kosumorin.journal.data.entity.Entry
+import io.github.kosumorin.journal.data.entity.EntryWithMetadata
 import io.github.kosumorin.journal.data.local.LocalDatabase
 import kotlinx.coroutines.flow.Flow
 import org.threeten.bp.LocalDate
@@ -15,6 +16,7 @@ interface EntryRepository {
     suspend fun update(entry: Entry)
     suspend fun get(entryId: String): Entry
     suspend fun getAllEntries(): List<Entry>
+    suspend fun getWithMetadata(entryId: String): EntryWithMetadata
 }
 
 @Singleton
@@ -33,4 +35,7 @@ class LocalEntryRepository @Inject constructor (private val localDatabase: Local
     override suspend fun get(entryId: String): Entry = localDatabase.entryDAO().get(entryId)
 
     override suspend fun getAllEntries(): List<Entry> = localDatabase.entryDAO().getAllEntries()
+
+    override suspend fun getWithMetadata(entryId: String): EntryWithMetadata
+        = localDatabase.entryDAO().getWithMetadata(entryId)
 }

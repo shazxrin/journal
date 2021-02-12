@@ -69,7 +69,7 @@ class EditorViewModel @Inject constructor(private val entryRepository: EntryRepo
             try {
                 val entry = entryRepository.get(entryId)
 
-                currentEntryId = entry.id
+                currentEntryId = entry.entryId
                 titleLiveData.postValue(entry.title)
                 contentLiveData.postValue(entry.content)
                 dateTimeLiveData.postValue(entry.dateTime)

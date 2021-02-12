@@ -10,7 +10,7 @@ class EntryJSONAdapter {
     @ToJson
     public fun entryToJSON(entry: Entry): EntryJSON {
         return EntryJSON(
-            entry.id,
+            entry.entryId,
             entry.title,
             entry.content,
             entry.dateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
@@ -20,7 +20,7 @@ class EntryJSONAdapter {
     @FromJson
     public fun entryFromJSON(entryJSON: EntryJSON): Entry {
         return Entry(
-            entryJSON.id,
+            entryJSON.entryId,
             entryJSON.title,
             entryJSON.content,
             LocalDateTime.parse(entryJSON.dateTime, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
