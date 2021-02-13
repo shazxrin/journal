@@ -10,10 +10,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.android.material.bottomappbar.BottomAppBar
 import io.github.kosumorin.journal.R
-import io.github.kosumorin.journal.utils.ui.actionBar
+import io.github.kosumorin.journal.ui.actionBar
 import io.github.kosumorin.journal.feature.MainFragment
-import io.github.kosumorin.journal.utils.ui.datetime.DatePickerDialogFragment
-import io.github.kosumorin.journal.utils.ui.datetime.DatePickerDialogViewModel
+import io.github.kosumorin.journal.ui.datetime.DatePickerDialogFragment
+import io.github.kosumorin.journal.ui.datetime.DatePickerDialogViewModel
 import io.github.kosumorin.journal.settings.SettingsActivity
 import io.noties.markwon.Markwon
 import kotlinx.android.synthetic.main.fragment_timeline.*

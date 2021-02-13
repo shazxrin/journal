@@ -1,4 +1,4 @@
-package io.github.kosumorin.journal.utils.ui.alert
+package io.github.kosumorin.journal.ui.alert
 
 import androidx.lifecycle.ViewModel
 import io.github.kosumorin.journal.utils.data.ConsumableLiveData

@@ -1,4 +1,4 @@
-package io.github.kosumorin.journal.utils.ui.alert
+package io.github.kosumorin.journal.ui.alert
 
 import android.content.Context
 import androidx.fragment.app.DialogFragment

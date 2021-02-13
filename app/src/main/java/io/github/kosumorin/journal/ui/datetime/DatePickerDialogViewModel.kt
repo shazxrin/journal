@@ -1,4 +1,4 @@
-package io.github.kosumorin.journal.utils.ui.datetime
+package io.github.kosumorin.journal.ui.datetime
 
 import androidx.lifecycle.ViewModel
 import io.github.kosumorin.journal.utils.data.ConsumableLiveData

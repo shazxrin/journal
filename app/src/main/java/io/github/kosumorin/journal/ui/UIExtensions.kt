@@ -1,4 +1,4 @@
-package io.github.kosumorin.journal.utils.ui
+package io.github.kosumorin.journal.ui
 
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
