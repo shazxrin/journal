@@ -2,6 +2,7 @@ package io.github.kosumorin.journal.data.repository
 
 import io.github.kosumorin.journal.data.entity.Tag
 import io.github.kosumorin.journal.data.local.LocalDatabase
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -10,7 +11,7 @@ interface TagRepository {
     suspend fun delete(tagId: String)
     suspend fun update(tag: Tag)
     suspend fun get(tagId: String): Tag
-    suspend fun getAll(): List<Tag>
+    fun getAll(): Flow<List<Tag>>
 }
 
 @Singleton
@@ -24,5 +25,5 @@ class LocalTagRepository @Inject constructor (private val localDatabase: LocalDa
 
     override suspend fun get(tagId: String): Tag = localDatabase.tagDAO().get(tagId)
 
-    override suspend fun getAll(): List<Tag> = localDatabase.tagDAO().getAll()
+    override fun getAll(): Flow<List<Tag>> = localDatabase.tagDAO().getAll()
 }

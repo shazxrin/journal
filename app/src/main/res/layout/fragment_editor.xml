@@ -83,7 +83,7 @@
 						android:src="@drawable/ic_tag"
 						app:tint="?attr/colorOnSurface"/>
 
-				<androidx.appcompat.widget.AppCompatEditText
+				<androidx.appcompat.widget.AppCompatTextView
 						android:id="@+id/tags"
 						style="?textAppearanceBody1"
 						android:layout_marginStart="8dp"

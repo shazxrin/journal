@@ -6,6 +6,7 @@ import android.widget.Button
 import android.widget.TextView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import io.github.kosumorin.journal.R
+import io.github.kosumorin.journal.ui.BottomSheetDialogFragment
 
 class AlertBottomSheetDialogFragment() : BottomSheetDialogFragment() {
     private lateinit var alertBottomSheetDialogViewModel: AlertBottomSheetDialogViewModel

@@ -3,6 +3,9 @@ package io.github.kosumorin.journal.feature.editor
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.ImageSpan
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -12,17 +15,19 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.chip.ChipDrawable
 import io.github.kosumorin.journal.R
-import io.github.kosumorin.journal.utils.ui.actionBar
+import io.github.kosumorin.journal.ui.actionBar
 import io.github.kosumorin.journal.feature.MainFragment
-import io.github.kosumorin.journal.utils.ui.alert.AlertBottomSheetDialogFragment
-import io.github.kosumorin.journal.utils.ui.alert.AlertBottomSheetDialogViewModel
-import io.github.kosumorin.journal.utils.ui.alert.AlertBottomSheetResponse
-import io.github.kosumorin.journal.utils.ui.datetime.DatePickerDialogFragment
-import io.github.kosumorin.journal.utils.ui.datetime.DatePickerDialogViewModel
+import io.github.kosumorin.journal.feature.tag.TagsBottomSheetDialogFragment
+import io.github.kosumorin.journal.ui.alert.AlertBottomSheetDialogFragment
+import io.github.kosumorin.journal.ui.alert.AlertBottomSheetDialogViewModel
+import io.github.kosumorin.journal.ui.alert.AlertBottomSheetResponse
+import io.github.kosumorin.journal.ui.datetime.DatePickerDialogFragment
+import io.github.kosumorin.journal.ui.datetime.DatePickerDialogViewModel
 import io.github.kosumorin.journal.utils.datetime.DateTimeHelper
-import io.github.kosumorin.journal.utils.ui.datetime.TimePickerDialogFragment
-import io.github.kosumorin.journal.utils.ui.datetime.TimePickerDialogViewModel
+import io.github.kosumorin.journal.ui.datetime.TimePickerDialogFragment
+import io.github.kosumorin.journal.ui.datetime.TimePickerDialogViewModel
 import io.noties.markwon.Markwon
 import kotlinx.android.synthetic.main.fragment_editor.*
 import org.threeten.bp.LocalDate
@@ -278,6 +283,22 @@ class EditorFragment() : MainFragment() {
         })
         markdown_toolbar.adapter = markdownToolbarAdapter
         markdown_toolbar.visibility = if (editorViewModel.isViewingMode) View.GONE else View.VISIBLE
+
+        // Setup tag edit text.
+        val chipDrawable = ChipDrawable.createFromResource(requireContext(), R.xml.tag_chip)
+
+        chipDrawable.setBounds(0, 0, chipDrawable.intrinsicWidth, chipDrawable.intrinsicHeight)
+        val chipImageSpan = ImageSpan(chipDrawable)
+
+        val tagSpan = SpannableStringBuilder("tag_name_here")
+        tagSpan.setSpan(chipImageSpan, 0, tagSpan.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        tags.setOnClickListener {
+            TagsBottomSheetDialogFragment().show(
+                childFragmentManager,
+                "TagsBottomSheetDialogFragment"
+            )
+        }
     }
 
     //region App Bar Options Menu

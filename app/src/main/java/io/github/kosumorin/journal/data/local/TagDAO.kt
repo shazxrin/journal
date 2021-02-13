@@ -2,6 +2,7 @@ package io.github.kosumorin.journal.data.local
 
 import androidx.room.*
 import io.github.kosumorin.journal.data.entity.Tag
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TagDAO {
@@ -18,5 +19,5 @@ interface TagDAO {
     suspend fun delete(id: String)
 
     @Query("SELECT * FROM tag")
-    suspend fun getAll(): List<Tag>
+    fun getAll(): Flow<List<Tag>>
 }
