@@ -19,7 +19,7 @@ import com.google.android.material.chip.ChipDrawable
 import io.github.kosumorin.journal.R
 import io.github.kosumorin.journal.ui.actionBar
 import io.github.kosumorin.journal.feature.MainFragment
-import io.github.kosumorin.journal.feature.tag.TagsBottomSheetDialogFragment
+import io.github.kosumorin.journal.feature.tag.TagListFragment
 import io.github.kosumorin.journal.ui.alert.AlertBottomSheetDialogFragment
 import io.github.kosumorin.journal.ui.alert.AlertBottomSheetDialogViewModel
 import io.github.kosumorin.journal.ui.alert.AlertBottomSheetResponse
@@ -294,7 +294,7 @@ class EditorFragment() : MainFragment() {
         tagSpan.setSpan(chipImageSpan, 0, tagSpan.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
         tags.setOnClickListener {
-            TagsBottomSheetDialogFragment().show(
+            TagListFragment().show(
                 childFragmentManager,
                 "TagsBottomSheetDialogFragment"
             )

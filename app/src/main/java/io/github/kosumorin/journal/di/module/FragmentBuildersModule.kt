@@ -6,7 +6,8 @@ import io.github.kosumorin.journal.ui.alert.AlertBottomSheetDialogFragment
 import io.github.kosumorin.journal.ui.datetime.DatePickerDialogFragment
 import io.github.kosumorin.journal.ui.datetime.TimePickerDialogFragment
 import io.github.kosumorin.journal.feature.editor.EditorFragment
-import io.github.kosumorin.journal.feature.tag.TagsBottomSheetDialogFragment
+import io.github.kosumorin.journal.feature.tag.TagCreatorFragment
+import io.github.kosumorin.journal.feature.tag.TagListFragment
 import io.github.kosumorin.journal.feature.timeline.TimelineFragment
 
 @Module
@@ -27,5 +28,9 @@ abstract class FragmentBuildersModule {
     abstract fun contributesAlertBottomSheetDialogFragment(): AlertBottomSheetDialogFragment
 
     @ContributesAndroidInjector
-    abstract fun contributesTagsBottomSheetDialogFragment(): TagsBottomSheetDialogFragment
+    abstract fun contributesTagListFragment(): TagListFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributesTagCreatorFragment(): TagCreatorFragment
+
 }

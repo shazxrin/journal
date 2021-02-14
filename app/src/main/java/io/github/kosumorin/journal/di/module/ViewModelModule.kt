@@ -11,7 +11,7 @@ import io.github.kosumorin.journal.ui.alert.AlertBottomSheetDialogViewModel
 import io.github.kosumorin.journal.ui.datetime.DatePickerDialogViewModel
 import io.github.kosumorin.journal.ui.datetime.TimePickerDialogViewModel
 import io.github.kosumorin.journal.feature.editor.EditorViewModel
-import io.github.kosumorin.journal.feature.tag.TagsBottomSheetDialogViewModel
+import io.github.kosumorin.journal.feature.tag.TagViewModel
 import io.github.kosumorin.journal.feature.timeline.TimelineViewModel
 import javax.inject.Inject
 import javax.inject.Provider
@@ -74,8 +74,8 @@ abstract class ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(TagsBottomSheetDialogViewModel::class)
-    abstract fun bindTagsBottomSheetDialogViewModel(tagsBottomSheetDialogViewModel: TagsBottomSheetDialogViewModel): ViewModel
+    @ViewModelKey(TagViewModel::class)
+    abstract fun bindTagsBottomSheetDialogViewModel(tagViewModel: TagViewModel): ViewModel
 
 }
 

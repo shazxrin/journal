@@ -26,7 +26,6 @@ class EditorViewModel @Inject constructor(private val entryRepository: EntryRepo
     // Live Data.
     val titleLiveData = MutableLiveData<String>("")
     val contentLiveData = MutableLiveData<String>("")
-    val tagsLiveData = MutableLiveData<String>("")
     val dateTimeLiveData = MutableLiveData<LocalDateTime>(LocalDateTime.now())
 
     val saveResultLiveData = ConsumableLiveData<Result>()

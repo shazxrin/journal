@@ -40,9 +40,12 @@
             android:id="@+id/tag_list_recycler_view"
             app:layout_constraintTop_toBottomOf="@id/tag_list_create_button"
             app:layout_constraintBottom_toTopOf="@id/buttons"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            tools:listitem="@layout/item_tag"/>
+            android:layout_height="256dp"
+            tools:listitem="@layout/item_tag"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:paddingVertical="8dp"
