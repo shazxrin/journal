@@ -37,11 +37,15 @@ class TagCreatorFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         view.findViewById<Button>(R.id.tag_creator_pos_button)?.setOnClickListener {
-            val newTagName = view
-                .findViewById<TextInputLayout>(R.id.tag_creator_tag_name_input)
-                ?.editText
-                ?.text
-                .toString()
+            val textInputLayout = view.findViewById<TextInputLayout>(R.id.tag_creator_tag_name_input)
+
+            val newTagName = textInputLayout?.editText?.text.toString()
+
+            if (newTagName.isBlank()) {
+                textInputLayout.error = "Tag name cannot be blank!"
+
+                return@setOnClickListener
+            }
 
             tagViewModel.create(newTagName)
         }
