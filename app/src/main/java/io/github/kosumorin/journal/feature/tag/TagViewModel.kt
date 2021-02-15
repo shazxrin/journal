@@ -16,7 +16,7 @@ class TagViewModel @Inject constructor(private val tagRepository: TagRepository)
     : ViewModel() {
     var hasInit = false
 
-    val selectedTagsLiveData = MutableLiveData<List<Tag>>()
+    val selectedTagsLiveData = MutableLiveData<List<Tag>>(listOf())
     val tagsLiveData = MutableLiveData<List<Tag>>()
 
     val createResultLiveData = ConsumableLiveData<Result>()
@@ -36,10 +36,18 @@ class TagViewModel @Inject constructor(private val tagRepository: TagRepository)
     }
 
     fun selectTag(tag: Tag) {
+        val selectedTagsSnapshot = selectedTagsLiveData.value
 
+        selectedTagsLiveData.postValue(selectedTagsSnapshot?.plus(tag))
     }
 
     fun deselectTag(tag: Tag) {
+        val selectedTagsSnapshot = selectedTagsLiveData.value
 
+        selectedTagsLiveData.postValue(selectedTagsSnapshot?.filter { it != tag })
+    }
+
+    fun clearSelectedTags() {
+        selectedTagsLiveData.postValue(null)
     }
 }

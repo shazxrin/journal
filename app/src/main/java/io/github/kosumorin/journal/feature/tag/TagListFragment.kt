@@ -7,13 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import androidx.fragment.app.DialogFragment
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import io.github.kosumorin.journal.R
-import io.github.kosumorin.journal.data.entity.Tag
-import io.github.kosumorin.journal.feature.MainFragment
 import io.github.kosumorin.journal.ui.BottomSheetDialogFragment
 
 class TagListFragment() : BottomSheetDialogFragment() {
@@ -53,6 +49,13 @@ class TagListFragment() : BottomSheetDialogFragment() {
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.tag_list_recycler_view)
         recyclerView?.adapter = tagListAdapter
+        tagListAdapter.onTagItemClickedHandler = { tag, isChecked ->
+            if (isChecked) {
+                tagViewModel.selectTag(tag)
+            } else {
+                tagViewModel.deselectTag(tag)
+            }
+        }
         tagViewModel.tagsLiveData.observe(viewLifecycleOwner) {
             tagListAdapter.submitList(it)
         }
