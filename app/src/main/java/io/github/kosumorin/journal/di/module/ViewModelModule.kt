@@ -7,7 +7,7 @@ import dagger.MapKey
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoMap
-import io.github.kosumorin.journal.ui.alert.AlertBottomSheetDialogViewModel
+import io.github.kosumorin.journal.ui.alert.AlertViewModel
 import io.github.kosumorin.journal.ui.datetime.DatePickerDialogViewModel
 import io.github.kosumorin.journal.ui.datetime.TimePickerDialogViewModel
 import io.github.kosumorin.journal.feature.editor.EditorViewModel
@@ -69,8 +69,8 @@ abstract class ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(AlertBottomSheetDialogViewModel::class)
-    abstract fun bindAlertBottomSheetDialogViewModel(alertBottomSheetDialogViewModel: AlertBottomSheetDialogViewModel): ViewModel
+    @ViewModelKey(AlertViewModel::class)
+    abstract fun bindAlertViewModel(alertViewModel: AlertViewModel): ViewModel
 
     @Binds
     @IntoMap

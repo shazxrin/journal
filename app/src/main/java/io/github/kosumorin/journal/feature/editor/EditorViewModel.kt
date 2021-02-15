@@ -21,7 +21,7 @@ class EditorViewModel @Inject constructor(private val entryRepository: EntryRepo
     var hasInit = false
     var isViewingMode = false
     var isDirty = false
-    var dialogState: EditorDialogState = EditorDialogState.NONE
+    var alertState: EditorAlertState = EditorAlertState.NONE
 
     // Live Data.
     val titleLiveData = MutableLiveData<String>("")

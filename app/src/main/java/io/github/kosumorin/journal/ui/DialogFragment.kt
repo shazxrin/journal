@@ -12,7 +12,7 @@ import dagger.android.support.HasSupportFragmentInjector
 import io.github.kosumorin.journal.di.module.ViewModelFactory
 import javax.inject.Inject
 
-abstract class BottomSheetDialogFragment() : DialogFragment(), HasSupportFragmentInjector {
+abstract class DialogFragment() : DialogFragment(), HasSupportFragmentInjector {
     @Inject
     lateinit var childFragmentInjector: DispatchingAndroidInjector<Fragment?>
 

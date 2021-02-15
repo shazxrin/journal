@@ -10,9 +10,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import io.github.kosumorin.journal.R
-import io.github.kosumorin.journal.ui.BottomSheetDialogFragment
+import io.github.kosumorin.journal.ui.DialogFragment
 
-class TagListFragment() : BottomSheetDialogFragment() {
+class TagListFragment() : DialogFragment() {
     private val tagListAdapter = TagListAdapter()
 
     private lateinit var tagViewModel: TagViewModel

@@ -20,9 +20,9 @@ import io.github.kosumorin.journal.R
 import io.github.kosumorin.journal.ui.actionBar
 import io.github.kosumorin.journal.feature.MainFragment
 import io.github.kosumorin.journal.feature.tag.TagListFragment
-import io.github.kosumorin.journal.ui.alert.AlertBottomSheetDialogFragment
-import io.github.kosumorin.journal.ui.alert.AlertBottomSheetDialogViewModel
-import io.github.kosumorin.journal.ui.alert.AlertBottomSheetResponse
+import io.github.kosumorin.journal.ui.alert.AlertFragment
+import io.github.kosumorin.journal.ui.alert.AlertViewModel
+import io.github.kosumorin.journal.ui.alert.AlertResponse
 import io.github.kosumorin.journal.ui.datetime.DatePickerDialogFragment
 import io.github.kosumorin.journal.ui.datetime.DatePickerDialogViewModel
 import io.github.kosumorin.journal.utils.datetime.DateTimeHelper
@@ -45,7 +45,7 @@ class EditorFragment() : MainFragment() {
     private lateinit var editorViewModel: EditorViewModel
     private lateinit var datePickerDialogViewModel: DatePickerDialogViewModel
     private lateinit var timePickerDialogViewModel: TimePickerDialogViewModel
-    private lateinit var alertDialogViewModel: AlertBottomSheetDialogViewModel
+    private lateinit var alertViewModel: AlertViewModel
 
     private val args: EditorFragmentArgs by navArgs()
 
@@ -57,7 +57,7 @@ class EditorFragment() : MainFragment() {
         editorViewModel = getViewModel()
         datePickerDialogViewModel = getSharedViewModel()
         timePickerDialogViewModel = getSharedViewModel()
-        alertDialogViewModel = getSharedViewModel()
+        alertViewModel = getSharedViewModel()
 
         if (!editorViewModel.hasInit) {
             // Load entry by id (view mode).
@@ -79,15 +79,15 @@ class EditorFragment() : MainFragment() {
         requireActivity().onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (editorViewModel.isDirty) {
-                    alertDialogViewModel.title = getText(R.string.alert_editor_save_title)
-                    alertDialogViewModel.positiveButtonText = getText(R.string.alert_editor_save_positive)
-                    alertDialogViewModel.negativeButtonText = getText(R.string.alert_editor_save_negative)
+                    alertViewModel.title = getText(R.string.alert_editor_save_title)
+                    alertViewModel.positiveButtonText = getText(R.string.alert_editor_save_positive)
+                    alertViewModel.negativeButtonText = getText(R.string.alert_editor_save_negative)
 
-                    editorViewModel.dialogState = EditorDialogState.UNSAVE_CHANGES
+                    editorViewModel.alertState = EditorAlertState.UNSAVE_CHANGES
 
-                    AlertBottomSheetDialogFragment().show(
+                    AlertFragment().show(
                         childFragmentManager,
-                        "SaveAlertBottomSheetDialogFragment"
+                        "SaveAlertFragment"
                     )
                 }
                 else {
@@ -186,26 +186,26 @@ class EditorFragment() : MainFragment() {
                 }
         })
 
-        alertDialogViewModel.userSelectionLiveData.consume(viewLifecycleOwner, Observer { res ->
-            when (editorViewModel.dialogState) {
-                EditorDialogState.UNSAVE_CHANGES -> {
+        alertViewModel.userSelectionLiveData.consume(viewLifecycleOwner, Observer { res ->
+            when (editorViewModel.alertState) {
+                EditorAlertState.UNSAVE_CHANGES -> {
                     when (res) {
-                        AlertBottomSheetResponse.POSITIVE -> editorViewModel.save()
-                        AlertBottomSheetResponse.NEGATIVE -> findNavController().navigateUp()
+                        AlertResponse.POSITIVE -> editorViewModel.save()
+                        AlertResponse.NEGATIVE -> findNavController().navigateUp()
                     }
                 }
-                EditorDialogState.DELETE -> {
+                EditorAlertState.DELETE -> {
                     when (res) {
-                        AlertBottomSheetResponse.POSITIVE -> editorViewModel.delete()
+                        AlertResponse.POSITIVE -> editorViewModel.delete()
                     }
                 }
                 else -> {
-                    throw RuntimeException("Check if editor dialog state has been properly set!")
+                    throw RuntimeException("Check if editor alert state has been properly set!")
                 }
             }
 
-            alertDialogViewModel.reset()
-            editorViewModel.dialogState = EditorDialogState.NONE
+            alertViewModel.reset()
+            editorViewModel.alertState = EditorAlertState.NONE
         })
     }
     //endregion
@@ -296,7 +296,7 @@ class EditorFragment() : MainFragment() {
         tags.setOnClickListener {
             TagListFragment().show(
                 childFragmentManager,
-                "TagsBottomSheetDialogFragment"
+                "TagListFragment"
             )
         }
     }
@@ -337,16 +337,16 @@ class EditorFragment() : MainFragment() {
                 }
             }
             R.id.delete -> {
-                alertDialogViewModel.title = getText(R.string.alert_editor_delete_title)
-                alertDialogViewModel.positiveButtonText = getText(R.string.alert_editor_delete_positive)
-                alertDialogViewModel.negativeButtonText = getText(R.string.alert_editor_delete_negative)
-                alertDialogViewModel.dismissOnNegative = true
+                alertViewModel.title = getText(R.string.alert_editor_delete_title)
+                alertViewModel.positiveButtonText = getText(R.string.alert_editor_delete_positive)
+                alertViewModel.negativeButtonText = getText(R.string.alert_editor_delete_negative)
+                alertViewModel.dismissOnNegative = true
 
-                editorViewModel.dialogState = EditorDialogState.DELETE
+                editorViewModel.alertState = EditorAlertState.DELETE
 
-                AlertBottomSheetDialogFragment().show(
+                AlertFragment().show(
                     childFragmentManager,
-                    "DeleteAlertBottomSheetDialogFragment"
+                    "DeleteAlertFragment"
                 )
             }
             R.id.preview -> {

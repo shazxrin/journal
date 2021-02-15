@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import io.github.kosumorin.journal.utils.data.ConsumableLiveData
 import javax.inject.Inject
 
-enum class AlertBottomSheetResponse { POSITIVE, NEGATIVE }
+enum class AlertResponse { POSITIVE, NEGATIVE }
 
-class AlertBottomSheetDialogViewModel @Inject constructor() : ViewModel() {
+class AlertViewModel @Inject constructor() : ViewModel() {
     // Settings.
     var title: CharSequence = ""
     var positiveButtonText: CharSequence = ""
@@ -14,7 +14,7 @@ class AlertBottomSheetDialogViewModel @Inject constructor() : ViewModel() {
     var dismissOnNegative: Boolean = false
 
     // Live Data.
-    val userSelectionLiveData = ConsumableLiveData<AlertBottomSheetResponse>()
+    val userSelectionLiveData = ConsumableLiveData<AlertResponse>()
 
     // Action.
     fun reset() {

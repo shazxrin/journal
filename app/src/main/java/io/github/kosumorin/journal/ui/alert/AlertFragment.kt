@@ -6,15 +6,15 @@ import android.widget.Button
 import android.widget.TextView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import io.github.kosumorin.journal.R
-import io.github.kosumorin.journal.ui.BottomSheetDialogFragment
+import io.github.kosumorin.journal.ui.DialogFragment
 
-class AlertBottomSheetDialogFragment() : BottomSheetDialogFragment() {
-    private lateinit var alertBottomSheetDialogViewModel: AlertBottomSheetDialogViewModel
+class AlertFragment() : DialogFragment() {
+    private lateinit var alertViewModel: AlertViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        alertBottomSheetDialogViewModel = getSharedViewModel()
+        alertViewModel = getSharedViewModel()
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -22,18 +22,18 @@ class AlertBottomSheetDialogFragment() : BottomSheetDialogFragment() {
         bottomSheetDialog.setContentView(R.layout.sheet_alert_dialog)
         bottomSheetDialog.dismissWithAnimation = true;
 
-        bottomSheetDialog.findViewById<TextView>(R.id.title)?.text = alertBottomSheetDialogViewModel.title
+        bottomSheetDialog.findViewById<TextView>(R.id.title)?.text = alertViewModel.title
         bottomSheetDialog.findViewById<Button>(R.id.positive_button)?.let {
-            it.text = alertBottomSheetDialogViewModel.positiveButtonText
-            it.setOnClickListener { alertBottomSheetDialogViewModel.userSelectionLiveData.postValue(AlertBottomSheetResponse.POSITIVE) }
+            it.text = alertViewModel.positiveButtonText
+            it.setOnClickListener { alertViewModel.userSelectionLiveData.postValue(AlertResponse.POSITIVE) }
         }
         bottomSheetDialog.findViewById<Button>(R.id.negative_button)?.let {
-            it.text = alertBottomSheetDialogViewModel.negativeButtonText
+            it.text = alertViewModel.negativeButtonText
             it.setOnClickListener {
-                if (alertBottomSheetDialogViewModel.dismissOnNegative) {
+                if (alertViewModel.dismissOnNegative) {
                     dismiss()
                 } else {
-                    alertBottomSheetDialogViewModel.userSelectionLiveData.postValue(AlertBottomSheetResponse.NEGATIVE)
+                    alertViewModel.userSelectionLiveData.postValue(AlertResponse.NEGATIVE)
                 }
             }
         }

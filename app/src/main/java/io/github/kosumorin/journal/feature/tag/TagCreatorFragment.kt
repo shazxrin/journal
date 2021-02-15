@@ -9,9 +9,9 @@ import android.widget.Button
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.textfield.TextInputLayout
 import io.github.kosumorin.journal.R
-import io.github.kosumorin.journal.ui.BottomSheetDialogFragment
+import io.github.kosumorin.journal.ui.DialogFragment
 
-class TagCreatorFragment : BottomSheetDialogFragment() {
+class TagCreatorFragment : DialogFragment() {
     private lateinit var tagViewModel: TagViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
