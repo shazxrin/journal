@@ -56,7 +56,7 @@ class TagListFragment() : DialogFragment() {
                 tagViewModel.deselectTag(tag)
             }
         }
-        tagViewModel.tagsLiveData.observe(viewLifecycleOwner) {
+        tagViewModel.tagsWithSelectedStateLiveData.observe(viewLifecycleOwner) {
             tagListAdapter.submitList(it)
         }
 
