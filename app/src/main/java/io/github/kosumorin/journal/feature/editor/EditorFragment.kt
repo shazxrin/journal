@@ -65,7 +65,7 @@ class EditorFragment() : MainFragment() {
             if (entryId != null) {
                 editorViewModel.isViewingMode = true
 
-                editorViewModel.load(entryId)
+                editorViewModel.loadEntry(entryId)
             }
         }
     }
@@ -138,7 +138,7 @@ class EditorFragment() : MainFragment() {
             }
         }
 
-        editorViewModel.saveResultLiveData.consume(viewLifecycleOwner, Observer { status ->
+        editorViewModel.saveEntryResultLiveData.consume(viewLifecycleOwner, Observer { status ->
             status
                 .onSuccess {
                     Toast.makeText(context, getText(R.string.toast_editor_entry_saved), Toast.LENGTH_SHORT).show()
@@ -158,7 +158,7 @@ class EditorFragment() : MainFragment() {
                 }
         })
 
-        editorViewModel.loadResultLiveData.consume(viewLifecycleOwner, Observer { status ->
+        editorViewModel.loadEntryResultLiveData.consume(viewLifecycleOwner, Observer { status ->
             status
                 .onSuccess {
                     val titleValue = editorViewModel.titleLiveData.value ?: ""
@@ -172,7 +172,7 @@ class EditorFragment() : MainFragment() {
                 }
         })
 
-        editorViewModel.deleteResultLiveData.consume(viewLifecycleOwner, Observer { status ->
+        editorViewModel.deleteEntryResultLiveData.consume(viewLifecycleOwner, Observer { status ->
             status
                 .onSuccess {
                     Toast.makeText(context, getText(R.string.toast_editor_entry_deleted), Toast.LENGTH_SHORT).show()
@@ -188,13 +188,13 @@ class EditorFragment() : MainFragment() {
             when (editorViewModel.alertState) {
                 EditorAlertState.UNSAVE_CHANGES -> {
                     when (res) {
-                        AlertResponse.POSITIVE -> editorViewModel.save()
+                        AlertResponse.POSITIVE -> editorViewModel.saveEntry()
                         AlertResponse.NEGATIVE -> findNavController().navigateUp()
                     }
                 }
                 EditorAlertState.DELETE -> {
                     when (res) {
-                        AlertResponse.POSITIVE -> editorViewModel.delete()
+                        AlertResponse.POSITIVE -> editorViewModel.deleteEntry()
                     }
                 }
                 else -> {
@@ -326,7 +326,7 @@ class EditorFragment() : MainFragment() {
                     Toast.makeText(requireContext(), getText(R.string.toast_editor_entry_empty_error), Toast.LENGTH_LONG)
                         .show()
                 } else {
-                    editorViewModel.save()
+                    editorViewModel.saveEntry()
                 }
             }
             R.id.delete -> {

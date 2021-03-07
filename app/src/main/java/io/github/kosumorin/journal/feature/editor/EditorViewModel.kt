@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import io.github.kosumorin.journal.utils.data.Result
 import io.github.kosumorin.journal.utils.data.ConsumableLiveData
 import io.github.kosumorin.journal.data.entity.Entry
+import io.github.kosumorin.journal.data.entity.EntryWithMetadata
 import io.github.kosumorin.journal.data.repository.EntryRepository
 import io.github.kosumorin.journal.data.repository.TagRepository
 import io.github.kosumorin.journal.feature.editor.tag.EditorTagStore
@@ -33,9 +34,9 @@ class EditorViewModel @Inject constructor(
     val contentLiveData = MutableLiveData<String>("")
     val dateTimeLiveData = MutableLiveData<LocalDateTime>(LocalDateTime.now())
 
-    val saveResultLiveData = ConsumableLiveData<Result>()
-    val loadResultLiveData = ConsumableLiveData<Result>()
-    val deleteResultLiveData = ConsumableLiveData<Result>()
+    val saveEntryResultLiveData = ConsumableLiveData<Result>()
+    val loadEntryResultLiveData = ConsumableLiveData<Result>()
+    val deleteEntryResultLiveData = ConsumableLiveData<Result>()
 
     val tagStore = EditorTagStore(viewModelScope, tagRepository)
 
@@ -46,7 +47,7 @@ class EditorViewModel @Inject constructor(
     }
 
     // Actions.
-    fun save() {
+    fun saveEntry() {
         val entryId = currentEntryId
 
         val entry = if (entryId != null) Entry(
@@ -60,52 +61,59 @@ class EditorViewModel @Inject constructor(
             dateTimeLiveData.value ?: LocalDateTime.now()
         )
 
+        val tags = tagStore.selectedTagsLiveData.value ?: listOf()
+
+        val entryWithMetadata = EntryWithMetadata(entry, tags)
+
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 if (entryId == null) {
-                    entryRepository.insert(entry)
+                    entryRepository.insertWithMetadata(entryWithMetadata)
                 }
                 else {
-                    entryRepository.update(entry)
+                    entryRepository.updateWithMetadata(entryWithMetadata)
                 }
 
-                saveResultLiveData.postValue(Result.success())
+                saveEntryResultLiveData.postValue(Result.success())
             }
             catch (e: Exception) {
-                saveResultLiveData.postValue(Result.failure(e))
+                saveEntryResultLiveData.postValue(Result.failure(e))
             }
         }
     }
 
-    fun load(entryId: String) {
+    fun loadEntry(entryId: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val entry = entryRepository.get(entryId)
+                val entryWithMetadata = entryRepository.getWithMetadata(entryId)
 
-                currentEntryId = entry.entryId
-                titleLiveData.postValue(entry.title)
-                contentLiveData.postValue(entry.content)
-                dateTimeLiveData.postValue(entry.dateTime)
+                currentEntryId = entryWithMetadata.entry.entryId
 
-                loadResultLiveData.postValue(Result.success())
+                titleLiveData.postValue(entryWithMetadata.entry.title)
+                contentLiveData.postValue(entryWithMetadata.entry.content)
+                dateTimeLiveData.postValue(entryWithMetadata.entry.dateTime)
+
+                tagStore.selectedTagsLiveData.postValue(entryWithMetadata.tags)
+
+                loadEntryResultLiveData.postValue(Result.success())
             }
             catch (e: Exception) {
-                loadResultLiveData.postValue(Result.failure(e))
+                loadEntryResultLiveData.postValue(Result.failure(e))
             }
         }
     }
 
-    fun delete() {
+    fun deleteEntry() {
         val entryToDeleteId = currentEntryId ?: return
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 entryRepository.delete(entryToDeleteId)
 
-                deleteResultLiveData.postValue(Result.success())
+                deleteEntryResultLiveData.postValue(Result.success())
             }
             catch (e: Exception) {
-                deleteResultLiveData.postValue(Result.failure(e))
+                deleteEntryResultLiveData.postValue(Result.failure(e))
             }
         }
     }

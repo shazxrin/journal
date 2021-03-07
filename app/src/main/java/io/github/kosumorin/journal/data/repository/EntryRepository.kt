@@ -19,7 +19,8 @@ interface EntryRepository {
     suspend fun get(entryId: String): Entry
     suspend fun getAllEntries(): List<Entry>
     suspend fun getWithMetadata(entryId: String): EntryWithMetadata
-    suspend fun insertWithMetadata(entry: Entry, tags: List<Tag>)
+    suspend fun insertWithMetadata(entryWithMetadata: EntryWithMetadata)
+    suspend fun updateWithMetadata(entryWithMetadata: EntryWithMetadata)
 }
 
 @Singleton
@@ -42,13 +43,35 @@ class LocalEntryRepository @Inject constructor (private val localDatabase: Local
     override suspend fun getWithMetadata(entryId: String): EntryWithMetadata
         = localDatabase.entryDAO().getWithMetadata(entryId)
 
-    override suspend fun insertWithMetadata(entry: Entry, tags: List<Tag>) {
-        localDatabase.entryDAO().insert(entry)
+    override suspend fun insertWithMetadata(entryWithMetadata: EntryWithMetadata) {
+        localDatabase.entryDAO().insert(entryWithMetadata.entry)
 
-        for (tag in tags) {
+        for (tag in entryWithMetadata.tags) {
             localDatabase.tagDAO().insert(tag)
 
-            localDatabase.entryTagDAO().insert(EntryTag(entryId = entry.entryId, tagId = tag.tagId))
+            localDatabase.entryTagDAO().insert(
+                EntryTag(
+                    entryId = entryWithMetadata.entry.entryId,
+                    tagId = tag.tagId
+                )
+            )
+        }
+    }
+
+    override suspend fun updateWithMetadata(entryWithMetadata: EntryWithMetadata) {
+        localDatabase.entryDAO().update(entryWithMetadata.entry)
+
+        for (tag in entryWithMetadata.tags) {
+            localDatabase.tagDAO().insert(tag)
+
+            localDatabase.entryTagDAO().deleteEntryTags(entryWithMetadata.entry.entryId)
+
+            localDatabase.entryTagDAO().insert(
+                EntryTag(
+                    entryId = entryWithMetadata.entry.entryId,
+                    tagId = tag.tagId
+                )
+            )
         }
     }
 }
