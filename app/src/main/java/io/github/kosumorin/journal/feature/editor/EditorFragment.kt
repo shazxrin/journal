@@ -20,6 +20,7 @@ import io.github.kosumorin.journal.R
 import io.github.kosumorin.journal.ui.actionBar
 import io.github.kosumorin.journal.feature.MainFragment
 import io.github.kosumorin.journal.feature.tag.TagListFragment
+import io.github.kosumorin.journal.feature.tag.TagViewModel
 import io.github.kosumorin.journal.ui.alert.AlertFragment
 import io.github.kosumorin.journal.ui.alert.AlertViewModel
 import io.github.kosumorin.journal.ui.alert.AlertResponse
@@ -46,6 +47,7 @@ class EditorFragment() : MainFragment() {
     private lateinit var datePickerDialogViewModel: DatePickerDialogViewModel
     private lateinit var timePickerDialogViewModel: TimePickerDialogViewModel
     private lateinit var alertViewModel: AlertViewModel
+    private lateinit var tagViewModel: TagViewModel
 
     private val args: EditorFragmentArgs by navArgs()
 
@@ -58,6 +60,7 @@ class EditorFragment() : MainFragment() {
         datePickerDialogViewModel = getSharedViewModel()
         timePickerDialogViewModel = getSharedViewModel()
         alertViewModel = getSharedViewModel()
+        tagViewModel = getSharedViewModel()
 
         if (!editorViewModel.hasInit) {
             // Load entry by id (view mode).
@@ -207,6 +210,10 @@ class EditorFragment() : MainFragment() {
             alertViewModel.reset()
             editorViewModel.alertState = EditorAlertState.NONE
         })
+
+        tagViewModel.selectedTagsLiveData.observe(viewLifecycleOwner) { tagList ->
+            tags.text = tagList.joinToString(", ") { tag -> tag.name }
+        }
     }
     //endregion
 
@@ -283,15 +290,6 @@ class EditorFragment() : MainFragment() {
         })
         markdown_toolbar.adapter = markdownToolbarAdapter
         markdown_toolbar.visibility = if (editorViewModel.isViewingMode) View.GONE else View.VISIBLE
-
-        // Setup tag edit text.
-        val chipDrawable = ChipDrawable.createFromResource(requireContext(), R.xml.tag_chip)
-
-        chipDrawable.setBounds(0, 0, chipDrawable.intrinsicWidth, chipDrawable.intrinsicHeight)
-        val chipImageSpan = ImageSpan(chipDrawable)
-
-        val tagSpan = SpannableStringBuilder("tag_name_here")
-        tagSpan.setSpan(chipImageSpan, 0, tagSpan.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
         tags.setOnClickListener {
             TagListFragment().show(
