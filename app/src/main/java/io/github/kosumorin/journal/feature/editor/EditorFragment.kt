@@ -11,6 +11,7 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.kosumorin.journal.R
 import io.github.kosumorin.journal.ui.actionBar
@@ -39,7 +40,10 @@ class EditorFragment() : MainFragment() {
     private val markdownToolbarAdapter = MarkdownToolbarAdapter()
 
     // View models.
-    private lateinit var editorViewModel: EditorViewModel
+    private val editorViewModel: EditorViewModel by navGraphViewModels(R.id.editor_nav_graph) {
+        viewModelFactory
+    }
+
     private lateinit var datePickerDialogViewModel: DatePickerDialogViewModel
     private lateinit var timePickerDialogViewModel: TimePickerDialogViewModel
     private lateinit var alertViewModel: AlertViewModel
@@ -51,7 +55,6 @@ class EditorFragment() : MainFragment() {
 
         setHasOptionsMenu(true)
 
-        editorViewModel = getSharedViewModel()
         datePickerDialogViewModel = getSharedViewModel()
         timePickerDialogViewModel = getSharedViewModel()
         alertViewModel = getSharedViewModel()

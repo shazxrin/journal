@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import io.github.kosumorin.journal.R
@@ -16,14 +17,10 @@ import io.github.kosumorin.journal.ui.DialogFragment
 class EditorTagListFragment() : DialogFragment() {
     private val tagListAdapter = EditorTagListAdapter()
 
-    private lateinit var editorViewModel: EditorViewModel
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        editorViewModel = getSharedViewModel()
+    private val editorViewModel: EditorViewModel by navGraphViewModels(R.id.editor_nav_graph) {
+        viewModelFactory
     }
-
+    
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val bottomSheetDialog = BottomSheetDialog(requireContext())
         bottomSheetDialog.dismissWithAnimation = true;
