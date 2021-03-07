@@ -1,4 +1,4 @@
-package io.github.kosumorin.journal.feature.editor
+package io.github.kosumorin.journal.feature.editor.markdown
 
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import io.github.kosumorin.journal.R
 
 class MarkdownToolbarAdapter()
-    : ListAdapter<MarkdownToolbarAdapter.MarkdownToolItem, RecyclerView.ViewHolder>(MarkdownToolItemDiffCallback()) {
+    : ListAdapter<MarkdownToolbarAdapter.MarkdownToolItem, RecyclerView.ViewHolder>(
+    MarkdownToolItemDiffCallback()
+) {
     var onToolItemClickHandler: ((MarkdownToolItem) -> Unit)? = null
 
     enum class MarkdownToolItem(val symbol: String, val hasSymbolTail: Boolean, val iconRes: Int) {
@@ -46,7 +48,7 @@ class MarkdownToolbarAdapter()
         holder.bind(getItem(position))
     }
 
-    class MarkdownToolItemDiffCallback : DiffUtil.ItemCallback<MarkdownToolbarAdapter.MarkdownToolItem>() {
+    class MarkdownToolItemDiffCallback : DiffUtil.ItemCallback<MarkdownToolItem>() {
         override fun areItemsTheSame(
             oldItem: MarkdownToolItem,
             newItem: MarkdownToolItem

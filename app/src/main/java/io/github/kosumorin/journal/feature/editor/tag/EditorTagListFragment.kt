@@ -1,4 +1,4 @@
-package io.github.kosumorin.journal.feature.tag
+package io.github.kosumorin.journal.feature.editor.tag
 
 import android.app.Dialog
 import android.os.Bundle
@@ -10,23 +10,18 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import io.github.kosumorin.journal.R
+import io.github.kosumorin.journal.feature.editor.EditorViewModel
 import io.github.kosumorin.journal.ui.DialogFragment
 
-class TagListFragment() : DialogFragment() {
-    private val tagListAdapter = TagListAdapter()
+class EditorTagListFragment() : DialogFragment() {
+    private val tagListAdapter = EditorTagListAdapter()
 
-    private lateinit var tagViewModel: TagViewModel
+    private lateinit var editorViewModel: EditorViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        tagViewModel = getSharedViewModel()
-
-        if (!tagViewModel.hasInit) {
-            tagViewModel.init()
-
-            tagViewModel.hasInit = true
-        }
+        editorViewModel = getSharedViewModel()
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -41,7 +36,7 @@ class TagListFragment() : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.sheet_tag_list_dialog, container, false)
+        return inflater.inflate(R.layout.sheet_editor_tag_list_dialog, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -51,12 +46,12 @@ class TagListFragment() : DialogFragment() {
         recyclerView?.adapter = tagListAdapter
         tagListAdapter.onTagItemClickedHandler = { tag, isChecked ->
             if (isChecked) {
-                tagViewModel.selectTag(tag)
+                editorViewModel.tagStore.selectTag(tag)
             } else {
-                tagViewModel.deselectTag(tag)
+                editorViewModel.tagStore.deselectTag(tag)
             }
         }
-        tagViewModel.tagsWithSelectedStateLiveData.observe(viewLifecycleOwner) {
+        editorViewModel.tagStore.tagsWithSelectedStateLiveData.observe(viewLifecycleOwner) {
             tagListAdapter.submitList(it)
         }
 
@@ -67,7 +62,7 @@ class TagListFragment() : DialogFragment() {
             dismiss()
         }
         view.findViewById<TextView>(R.id.tag_list_create_button)?.setOnClickListener {
-            TagCreatorFragment().show(
+            EditorTagCreatorFragment().show(
                 childFragmentManager,
                 "TagsCreatorFragment"
             )

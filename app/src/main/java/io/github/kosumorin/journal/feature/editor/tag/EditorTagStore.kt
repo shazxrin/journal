@@ -1,29 +1,22 @@
-package io.github.kosumorin.journal.feature.tag
+package io.github.kosumorin.journal.feature.editor.tag
 
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import io.github.kosumorin.journal.data.entity.Tag
 import io.github.kosumorin.journal.data.repository.TagRepository
 import io.github.kosumorin.journal.utils.data.ConsumableLiveData
 import io.github.kosumorin.journal.utils.data.Result
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-typealias TagWithSelectedState = Pair<Tag, Boolean>
-
-class TagViewModel @Inject constructor(private val tagRepository: TagRepository)
-    : ViewModel() {
-    var hasInit = false
-
+class EditorTagStore(private val scope: CoroutineScope, private val tagRepository: TagRepository) {
     val selectedTagsLiveData = MutableLiveData<List<Tag>>(listOf())
     val tagsLiveData = MutableLiveData<List<Tag>>()
     val tagsWithSelectedStateLiveData = MediatorLiveData<List<TagWithSelectedState>>()
 
-    val createResultLiveData = ConsumableLiveData<Result>()
+    val createTagResultLiveData = ConsumableLiveData<Result>()
 
     private fun mergeTagAndSelectedState(): List<TagWithSelectedState> {
         val selectedTags = selectedTagsLiveData.value ?: listOf()
@@ -45,16 +38,16 @@ class TagViewModel @Inject constructor(private val tagRepository: TagRepository)
             }
         }
 
-        viewModelScope.launch(Dispatchers.IO) {
+        scope.launch(Dispatchers.IO) {
             tagRepository.getAll().collect { list -> tagsLiveData.postValue(list) }
         }
     }
 
-    fun create(name: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+    fun createTag(name: String) {
+        scope.launch(Dispatchers.IO) {
             tagRepository.insert(Tag(name, "", ""))
 
-            createResultLiveData.postValue(Result.success())
+            createTagResultLiveData.postValue(Result.success())
         }
     }
 
@@ -70,7 +63,9 @@ class TagViewModel @Inject constructor(private val tagRepository: TagRepository)
         selectedTagsLiveData.postValue(selectedTagsSnapshot?.filter { it != tag })
     }
 
-    fun clearSelectedTags() {
-        selectedTagsLiveData.postValue(listOf())
+    fun setSelectedTags(tags: List<Tag>) {
+        val selectedTagsSnapshot = selectedTagsLiveData.value
+
+        selectedTagsLiveData.postValue(tags)
     }
 }

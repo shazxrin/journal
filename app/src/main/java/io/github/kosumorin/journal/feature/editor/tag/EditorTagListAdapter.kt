@@ -1,4 +1,4 @@
-package io.github.kosumorin.journal.feature.tag
+package io.github.kosumorin.journal.feature.editor.tag
 
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import io.github.kosumorin.journal.R
 import io.github.kosumorin.journal.data.entity.Tag
 
-class TagListAdapter : ListAdapter<TagWithSelectedState, RecyclerView.ViewHolder>(TagDiffCallback()) {
+class EditorTagListAdapter : ListAdapter<TagWithSelectedState, RecyclerView.ViewHolder>(TagDiffCallback()) {
     var onTagItemClickedHandler: ((tag: Tag, isChecked: Boolean) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -31,11 +31,11 @@ class TagListAdapter : ListAdapter<TagWithSelectedState, RecyclerView.ViewHolder
 
     class TagDiffCallback : DiffUtil.ItemCallback<TagWithSelectedState>() {
         override fun areItemsTheSame(oldItem: TagWithSelectedState, newItem: TagWithSelectedState): Boolean {
-            return oldItem.first === newItem.first
+            return oldItem.tag === newItem.tag
         }
 
         override fun areContentsTheSame(oldItem: TagWithSelectedState, newItem: TagWithSelectedState): Boolean {
-            return oldItem.first == newItem.first
+            return oldItem.tag == newItem.tag
         }
     }
 
@@ -45,16 +45,16 @@ class TagListAdapter : ListAdapter<TagWithSelectedState, RecyclerView.ViewHolder
         private val tagItemCheckbox = view.findViewById<CheckBox>(R.id.tag_item_checkbox)
 
         fun bind(tagWithSelectedState: TagWithSelectedState) {
-            tagNameTextView.text = tagWithSelectedState.first.name
-            tagItemCheckbox.isChecked = tagWithSelectedState.second
+            tagNameTextView.text = tagWithSelectedState.tag.name
+            tagItemCheckbox.isChecked = tagWithSelectedState.isSelected
 
             tagItemContainer.setOnClickListener {
                 tagItemCheckbox.isChecked = !tagItemCheckbox.isChecked
 
-                onTagItemClickedHandler?.invoke(tagWithSelectedState.first, tagItemCheckbox.isChecked)
+                onTagItemClickedHandler?.invoke(tagWithSelectedState.tag, tagItemCheckbox.isChecked)
             }
             tagItemCheckbox.setOnClickListener {
-                onTagItemClickedHandler?.invoke(tagWithSelectedState.first, tagItemCheckbox.isChecked)
+                onTagItemClickedHandler?.invoke(tagWithSelectedState.tag, tagItemCheckbox.isChecked)
             }
         }
 

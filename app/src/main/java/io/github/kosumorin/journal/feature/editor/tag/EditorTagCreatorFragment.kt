@@ -1,4 +1,4 @@
-package io.github.kosumorin.journal.feature.tag
+package io.github.kosumorin.journal.feature.editor.tag
 
 import android.app.Dialog
 import android.os.Bundle
@@ -9,15 +9,16 @@ import android.widget.Button
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.textfield.TextInputLayout
 import io.github.kosumorin.journal.R
+import io.github.kosumorin.journal.feature.editor.EditorViewModel
 import io.github.kosumorin.journal.ui.DialogFragment
 
-class TagCreatorFragment : DialogFragment() {
-    private lateinit var tagViewModel: TagViewModel
+class EditorTagCreatorFragment : DialogFragment() {
+    private lateinit var editorViewModel: EditorViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        tagViewModel = getSharedViewModel()
+        editorViewModel = getSharedViewModel()
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -32,7 +33,7 @@ class TagCreatorFragment : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.sheet_tag_creator_dialog, container, false)
+        return inflater.inflate(R.layout.sheet_editor_tag_creator_dialog, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -47,14 +48,14 @@ class TagCreatorFragment : DialogFragment() {
                 return@setOnClickListener
             }
 
-            tagViewModel.create(newTagName)
+            editorViewModel.tagStore.createTag(newTagName)
         }
 
         view.findViewById<Button>(R.id.tag_creator_neg_button)?.setOnClickListener {
             dismiss()
         }
 
-        tagViewModel.createResultLiveData.consume(viewLifecycleOwner) {
+        editorViewModel.tagStore.createTagResultLiveData.consume(viewLifecycleOwner) {
             if (it.isSuccess()) {
                 dismiss()
             }

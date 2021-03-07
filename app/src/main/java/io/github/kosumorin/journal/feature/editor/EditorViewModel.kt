@@ -7,13 +7,18 @@ import io.github.kosumorin.journal.utils.data.Result
 import io.github.kosumorin.journal.utils.data.ConsumableLiveData
 import io.github.kosumorin.journal.data.entity.Entry
 import io.github.kosumorin.journal.data.repository.EntryRepository
+import io.github.kosumorin.journal.data.repository.TagRepository
+import io.github.kosumorin.journal.feature.editor.tag.EditorTagStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.threeten.bp.LocalDateTime
 import java.lang.Exception
 import javax.inject.Inject
 
-class EditorViewModel @Inject constructor(private val entryRepository: EntryRepository) : ViewModel() {
+class EditorViewModel @Inject constructor(
+    private val entryRepository: EntryRepository,
+    private val tagRepository: TagRepository
+) : ViewModel() {
     var currentEntryId: String? = null
         private set
 
@@ -31,6 +36,14 @@ class EditorViewModel @Inject constructor(private val entryRepository: EntryRepo
     val saveResultLiveData = ConsumableLiveData<Result>()
     val loadResultLiveData = ConsumableLiveData<Result>()
     val deleteResultLiveData = ConsumableLiveData<Result>()
+
+    val tagStore = EditorTagStore(viewModelScope, tagRepository)
+
+    fun init() {
+        tagStore.init()
+
+        hasInit = true
+    }
 
     // Actions.
     fun save() {

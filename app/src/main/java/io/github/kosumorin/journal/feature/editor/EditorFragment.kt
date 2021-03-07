@@ -3,9 +3,6 @@ package io.github.kosumorin.journal.feature.editor
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
-import android.text.SpannableStringBuilder
-import android.text.Spanned
-import android.text.style.ImageSpan
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -15,12 +12,11 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.chip.ChipDrawable
 import io.github.kosumorin.journal.R
 import io.github.kosumorin.journal.ui.actionBar
 import io.github.kosumorin.journal.feature.MainFragment
-import io.github.kosumorin.journal.feature.tag.TagListFragment
-import io.github.kosumorin.journal.feature.tag.TagViewModel
+import io.github.kosumorin.journal.feature.editor.markdown.MarkdownToolbarAdapter
+import io.github.kosumorin.journal.feature.editor.tag.EditorTagListFragment
 import io.github.kosumorin.journal.ui.alert.AlertFragment
 import io.github.kosumorin.journal.ui.alert.AlertViewModel
 import io.github.kosumorin.journal.ui.alert.AlertResponse
@@ -47,7 +43,6 @@ class EditorFragment() : MainFragment() {
     private lateinit var datePickerDialogViewModel: DatePickerDialogViewModel
     private lateinit var timePickerDialogViewModel: TimePickerDialogViewModel
     private lateinit var alertViewModel: AlertViewModel
-    private lateinit var tagViewModel: TagViewModel
 
     private val args: EditorFragmentArgs by navArgs()
 
@@ -56,13 +51,15 @@ class EditorFragment() : MainFragment() {
 
         setHasOptionsMenu(true)
 
-        editorViewModel = getViewModel()
+        editorViewModel = getSharedViewModel()
         datePickerDialogViewModel = getSharedViewModel()
         timePickerDialogViewModel = getSharedViewModel()
         alertViewModel = getSharedViewModel()
-        tagViewModel = getSharedViewModel()
 
+        // Check initialization state of the viewmodel.
         if (!editorViewModel.hasInit) {
+            editorViewModel.init()
+
             // Load entry by id (view mode).
             val entryId = args.entryId
             if (entryId != null) {
@@ -70,11 +67,7 @@ class EditorFragment() : MainFragment() {
 
                 editorViewModel.load(entryId)
             }
-
-            editorViewModel.hasInit = true
         }
-
-        tagViewModel.clearSelectedTags()
     }
 
     override fun onAttach(context: Context) {
@@ -213,7 +206,7 @@ class EditorFragment() : MainFragment() {
             editorViewModel.alertState = EditorAlertState.NONE
         })
 
-        tagViewModel.selectedTagsLiveData.observe(viewLifecycleOwner) { tagList ->
+        editorViewModel.tagStore.selectedTagsLiveData.observe(viewLifecycleOwner) { tagList ->
             tags.text = tagList.joinToString(", ") { tag -> tag.name }
         }
     }
@@ -294,7 +287,7 @@ class EditorFragment() : MainFragment() {
         markdown_toolbar.visibility = if (editorViewModel.isViewingMode) View.GONE else View.VISIBLE
 
         tags.setOnClickListener {
-            TagListFragment().show(
+            EditorTagListFragment().show(
                 childFragmentManager,
                 "TagListFragment"
             )
