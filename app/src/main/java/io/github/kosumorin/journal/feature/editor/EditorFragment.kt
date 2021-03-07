@@ -73,6 +73,8 @@ class EditorFragment() : MainFragment() {
 
             editorViewModel.hasInit = true
         }
+
+        tagViewModel.clearSelectedTags()
     }
 
     override fun onAttach(context: Context) {
