@@ -36,6 +36,14 @@ class SettingsActivity : AppCompatActivity(),
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+
+        if (supportFragmentManager.backStackEntryCount == 0) {
+            findViewById<TextView>(R.id.title).text = getString(R.string.title_settings)
+        }
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
@@ -85,8 +93,6 @@ class SettingsActivity : AppCompatActivity(),
         when (item.itemId) {
             android.R.id.home -> {
                 onBackPressed()
-
-                findViewById<TextView>(R.id.title).text = getString(R.string.title_settings)
             }
         }
 
