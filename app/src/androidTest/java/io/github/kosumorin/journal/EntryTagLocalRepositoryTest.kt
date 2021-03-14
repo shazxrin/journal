@@ -5,7 +5,7 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.github.kosumorin.journal.data.entity.Entry
-import io.github.kosumorin.journal.data.entity.EntryTag
+import io.github.kosumorin.journal.data.entity.EntryWithMetadata
 import io.github.kosumorin.journal.data.entity.Tag
 import io.github.kosumorin.journal.data.local.LocalDatabase
 import io.github.kosumorin.journal.data.repository.*
@@ -43,16 +43,42 @@ class EntryTagLocalRepositoryTest {
     @Test
     fun testGetEntryWithMetadata() = runBlocking {
         val entry = Entry("title", "content", LocalDateTime.now())
-        val tag1 = Tag("name1", "#000000", "❤")
-        val tag2 = Tag("name2", "#000001", "💔")
+        val tag1 = Tag("name1", "#000000")
+        val tag2 = Tag("name2", "#000001")
 
-        entryRepository.insertWithMetadata(entry, listOf(tag1, tag2))
+        val insertEntryWithMetadata = EntryWithMetadata(entry, listOf(tag1, tag2))
 
-        val entryWithMetadata = entryRepository.getWithMetadata(entry.entryId)
+        entryRepository.insertWithMetadata(insertEntryWithMetadata)
 
-        assert(entryWithMetadata.entry.entryId == entry.entryId)
-        assert(entryWithMetadata.tags.size == 2)
-        assert(entryWithMetadata.tags.contains(tag1))
-        assert(entryWithMetadata.tags.contains(tag2))
+        val gotEntryWithMetadata = entryRepository.getWithMetadata(entry.entryId)
+
+        assert(gotEntryWithMetadata.entry.entryId == entry.entryId)
+        assert(gotEntryWithMetadata.tags.size == 2)
+        assert(gotEntryWithMetadata.tags.contains(tag1))
+        assert(gotEntryWithMetadata.tags.contains(tag2))
+    }
+
+    @Test
+    fun testUpdateEntryWithMetadata() = runBlocking {
+        val entry = Entry("title", "content", LocalDateTime.now())
+        val tag1 = Tag("name1", "#000000")
+        val tag2 = Tag("name2", "#000001")
+
+        val insertEntryWithMetadata = EntryWithMetadata(entry, listOf(tag1, tag2))
+
+        entryRepository.insertWithMetadata(insertEntryWithMetadata)
+
+        val tag3 = Tag("name3", "#000001")
+        val updateEntryWithMetadata = insertEntryWithMetadata.copy(tags = listOf(tag3))
+
+        entryRepository.updateWithMetadata(updateEntryWithMetadata)
+
+        val gotEntryWithMetadata = entryRepository.getWithMetadata(entry.entryId)
+
+        assert(gotEntryWithMetadata.entry.entryId == entry.entryId)
+        assert(gotEntryWithMetadata.tags.size == 1)
+        assert(!gotEntryWithMetadata.tags.contains(tag1))
+        assert(!gotEntryWithMetadata.tags.contains(tag2))
+        assert(gotEntryWithMetadata.tags.contains(tag3))
     }
 }
