@@ -3,7 +3,6 @@ package io.github.kosumorin.journal.data.repository
 import io.github.kosumorin.journal.data.entity.Entry
 import io.github.kosumorin.journal.data.entity.EntryTag
 import io.github.kosumorin.journal.data.entity.EntryWithMetadata
-import io.github.kosumorin.journal.data.entity.Tag
 import io.github.kosumorin.journal.data.local.LocalDatabase
 import kotlinx.coroutines.flow.Flow
 import org.threeten.bp.LocalDate
@@ -64,7 +63,7 @@ class LocalEntryRepository @Inject constructor (private val localDatabase: Local
         for (tag in entryWithMetadata.tags) {
             localDatabase.tagDAO().insert(tag)
 
-            localDatabase.entryTagDAO().deleteEntryTags(entryWithMetadata.entry.entryId)
+            localDatabase.entryTagDAO().deleteEntryTagsByEntryId(entryWithMetadata.entry.entryId)
 
             localDatabase.entryTagDAO().insert(
                 EntryTag(

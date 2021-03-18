@@ -2,6 +2,7 @@
     <string name="app_name">Journal</string>
 
     <!--  Timeline  -->
+    <string name="menu_item_timeline_tag">Tags</string>
     <string name="menu_item_timeline_date">Go to Date</string>
     <string name="menu_item_timeline_settings">Settings</string>
 

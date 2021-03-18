@@ -91,7 +91,12 @@ class TimelineFragment : MainFragment(), DatePickerDialog.OnDateSetListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-             R.id.datePicker -> {
+            R.id.menu_timeline_tag -> {
+                findNavController().navigate(
+                    TimelineFragmentDirections.actionTimelineFragmentToTagFragment()
+                )
+            }
+            R.id.datePicker -> {
                  datePickerDialogViewModel.showSelectedDate = timelineViewModel.currentDate
                  DatePickerDialogFragment().show(
                      requireFragmentManager(),

@@ -8,9 +8,9 @@ import javax.inject.Singleton
 
 interface TagRepository {
     suspend fun insert(tag: Tag)
-    suspend fun delete(tagId: String)
+    suspend fun delete(tag: Tag)
     suspend fun update(tag: Tag)
-    suspend fun get(tagId: String): Tag
+    suspend fun getById(tagId: String): Tag
     fun getAll(): Flow<List<Tag>>
 }
 
@@ -19,11 +19,15 @@ class LocalTagRepository @Inject constructor (private val localDatabase: LocalDa
     : TagRepository {
     override suspend fun insert(tag: Tag) = localDatabase.tagDAO().insert(tag)
 
-    override suspend fun delete(tagId: String) = localDatabase.tagDAO().delete(tagId)
+    override suspend fun delete(tag: Tag) {
+        localDatabase.tagDAO().delete(tag.tagId)
+
+        localDatabase.entryTagDAO().deleteEntryTagsByTagId(tag.tagId)
+    }
 
     override suspend fun update(tag: Tag) = localDatabase.tagDAO().update(tag)
 
-    override suspend fun get(tagId: String): Tag = localDatabase.tagDAO().get(tagId)
+    override suspend fun getById(tagId: String): Tag = localDatabase.tagDAO().get(tagId)
 
     override fun getAll(): Flow<List<Tag>> = localDatabase.tagDAO().getAll()
 }

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/nav_graph" app:startDestination="@id/timelineScreenFragment">
+            android:id="@+id/nav_graph" app:startDestination="@id/timelineFragment">
 
-    <fragment android:id="@+id/timelineScreenFragment"
+    <fragment android:id="@+id/timelineFragment"
               android:name="io.github.kosumorin.journal.feature.timeline.TimelineFragment"
-              android:label="TimelineScreenFragment">
+              android:label="TimelineFragment">
         <action
                 android:id="@+id/timeline_open_editor_action"
                 app:destination="@id/editor_nav_graph"
@@ -13,9 +13,12 @@
                 app:exitAnim="@anim/nav_default_exit_anim"
                 app:popEnterAnim="@anim/nav_default_pop_enter_anim"
                 app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+                android:id="@+id/action_timelineFragment_to_tagFragment"
+                app:destination="@id/tagFragment" />
     </fragment>
     <navigation android:id="@+id/editor_nav_graph"
-            app:startDestination="@id/editorScreenFragment">
+            app:startDestination="@id/editorFragment">
         <argument
                 android:name="entryId"
                 app:argType="string"
@@ -29,15 +32,15 @@
                     app:destination="@id/editorTagCreatorFragment" />
         </fragment>
         <fragment
-                android:id="@+id/editorScreenFragment"
+                android:id="@+id/editorFragment"
                 android:name="io.github.kosumorin.journal.feature.editor.EditorFragment"
-                android:label="EditorScreenFragment">
+                android:label="EditorFragment">
             <argument
                     android:name="entryId"
                     app:argType="string"
                     app:nullable="true" />
             <action
-                    android:id="@+id/action_editorScreenFragment_to_editorTagListFragment"
+                    android:id="@+id/action_editorFragment_to_editorTagListFragment"
                     app:destination="@id/editorTagListFragment" />
         </fragment>
         <fragment
@@ -45,4 +48,8 @@
                 android:name="io.github.kosumorin.journal.feature.editor.tag.EditorTagCreatorFragment"
                 android:label="EditorTagCreatorFragment" />
     </navigation>
+    <fragment
+            android:id="@+id/tagFragment"
+            android:name="io.github.kosumorin.journal.feature.tag.TagFragment"
+            android:label="TagFragment" />
 </navigation>

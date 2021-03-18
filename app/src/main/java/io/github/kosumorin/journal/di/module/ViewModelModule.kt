@@ -11,6 +11,7 @@ import io.github.kosumorin.journal.ui.alert.AlertViewModel
 import io.github.kosumorin.journal.ui.datetime.DatePickerDialogViewModel
 import io.github.kosumorin.journal.ui.datetime.TimePickerDialogViewModel
 import io.github.kosumorin.journal.feature.editor.EditorViewModel
+import io.github.kosumorin.journal.feature.tag.TagViewModel
 import io.github.kosumorin.journal.feature.timeline.TimelineViewModel
 import javax.inject.Inject
 import javax.inject.Provider
@@ -70,6 +71,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(AlertViewModel::class)
     abstract fun bindAlertViewModel(alertViewModel: AlertViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(TagViewModel::class)
+    abstract fun bindTagViewModel(tagViewModel: TagViewModel): ViewModel
 }
 
 @Module

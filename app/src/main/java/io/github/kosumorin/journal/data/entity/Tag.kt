@@ -9,13 +9,11 @@ import java.util.*
 data class Tag(
     @PrimaryKey val tagId: String,
     val name: String,
-    val color: String,
-    val icon: String
+    val color: String
 ) {
   @Ignore
   constructor(
       name: String,
-      color: String,
-      icon: String
-  ) : this(UUID.randomUUID().toString(), name, color, icon)
+      color: String
+  ) : this(UUID.randomUUID().toString(), name, color)
 }

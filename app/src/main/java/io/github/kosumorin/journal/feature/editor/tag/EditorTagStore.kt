@@ -45,7 +45,7 @@ class EditorTagStore(private val scope: CoroutineScope, private val tagRepositor
 
     fun createTag(name: String) {
         scope.launch(Dispatchers.IO) {
-            tagRepository.insert(Tag(name, "", ""))
+            tagRepository.insert(Tag(name, ""))
 
             createTagResultLiveData.postValue(Result.success())
         }

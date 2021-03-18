@@ -16,7 +16,7 @@ class EditorTagListAdapter : ListAdapter<TagWithSelectedState, RecyclerView.View
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return TagViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.item_tag, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.item_editor_tag, parent, false)
         )
     }
 

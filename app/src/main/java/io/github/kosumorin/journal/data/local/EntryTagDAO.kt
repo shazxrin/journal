@@ -9,5 +9,8 @@ interface EntryTagDAO {
     suspend fun insert(entryTag: EntryTag)
 
     @Query("DELETE FROM entrytag WHERE entryId = :entryId")
-    suspend fun deleteEntryTags(entryId: String)
+    suspend fun deleteEntryTagsByEntryId(entryId: String)
+
+    @Query("DELETE FROM entrytag WHERE tagId = :tagId")
+    suspend fun deleteEntryTagsByTagId(tagId: String)
 }
