@@ -52,7 +52,7 @@ class TagFragment() : MainFragment() {
     private fun setupBottomAppBar() {
         fabBottomAppBar?.hide()
 
-        bottomAppBar?.performShow()
+        bottomAppBar?.performHide()
         bottomAppBar?.hideOnScroll = false
 
         actionBar?.setDisplayHomeAsUpEnabled(false)
