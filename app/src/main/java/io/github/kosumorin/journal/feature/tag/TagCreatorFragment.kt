@@ -2,5 +2,5 @@ package io.github.kosumorin.journal.feature.tag
 
 import io.github.kosumorin.journal.ui.DialogFragment
 
-class TagEditorFragment : DialogFragment() {
+class TagCreatorFragment : DialogFragment() {
 }
