@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import io.github.kosumorin.journal.R
 import io.github.kosumorin.journal.data.entity.Tag
 import io.github.kosumorin.journal.feature.MainFragment
+import io.github.kosumorin.journal.ui.actionBar
 
 class TagFragment() : MainFragment() {
     private lateinit var tagViewModel: TagViewModel
@@ -35,6 +36,8 @@ class TagFragment() : MainFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupBottomAppBar()
+
         val recyclerView = view.findViewById<RecyclerView>(R.id.tag_list_recycler_view)
         tagListAdapter.onTagItemSaveClickedHandler = { newTag: Tag -> tagViewModel.updateTag(newTag) }
         tagListAdapter.onTagItemDeleteClickedHandler = { tag: Tag -> tagViewModel.deleteTag(tag) }
@@ -44,5 +47,14 @@ class TagFragment() : MainFragment() {
         tagViewModel.tags.observe(viewLifecycleOwner) {
             tagListAdapter.submitList(it)
         }
+    }
+
+    private fun setupBottomAppBar() {
+        fabBottomAppBar?.hide()
+
+        bottomAppBar?.performShow()
+        bottomAppBar?.hideOnScroll = false
+
+        actionBar?.setDisplayHomeAsUpEnabled(false)
     }
 }
