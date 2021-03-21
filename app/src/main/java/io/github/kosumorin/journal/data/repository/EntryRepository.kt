@@ -64,10 +64,11 @@ class LocalEntryRepository @Inject constructor (private val localDatabase: Local
     override suspend fun updateWithMetadata(entryWithMetadata: EntryWithMetadata) {
         localDatabase.entryDAO().update(entryWithMetadata.entry)
 
+        // Update entry tags by deleting and inserting relationships.
+        localDatabase.entryTagDAO().deleteEntryTagsByEntryId(entryWithMetadata.entry.entryId)
         for (tag in entryWithMetadata.tags) {
+            // Insert will only insert new tags. Existing tags are ignored.
             localDatabase.tagDAO().insert(tag)
-
-            localDatabase.entryTagDAO().deleteEntryTagsByEntryId(entryWithMetadata.entry.entryId)
 
             localDatabase.entryTagDAO().insert(
                 EntryTag(

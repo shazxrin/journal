@@ -9,7 +9,7 @@ interface TagDAO {
     @Query("SELECT * FROM tag WHERE tagId = :id")
     suspend fun get(id: String): Tag
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(tag: Tag)
 
     @Update
