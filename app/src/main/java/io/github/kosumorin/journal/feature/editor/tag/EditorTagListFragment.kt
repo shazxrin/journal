@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -20,7 +21,7 @@ class EditorTagListFragment() : DialogFragment() {
     private val editorViewModel: EditorViewModel by navGraphViewModels(R.id.editor_nav_graph) {
         viewModelFactory
     }
-    
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val bottomSheetDialog = BottomSheetDialog(requireContext())
         bottomSheetDialog.dismissWithAnimation = true;
@@ -59,9 +60,8 @@ class EditorTagListFragment() : DialogFragment() {
             dismiss()
         }
         view.findViewById<TextView>(R.id.tag_list_create_button)?.setOnClickListener {
-            EditorTagCreatorFragment().show(
-                childFragmentManager,
-                "TagsCreatorFragment"
+            findNavController().navigate(
+                EditorTagListFragmentDirections.actionEditorTagListFragmentToEditorTagCreatorFragment()
             )
         }
     }

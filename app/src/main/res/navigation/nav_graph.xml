@@ -23,14 +23,14 @@
                 android:name="entryId"
                 app:argType="string"
                 app:nullable="true" />
-        <fragment
+        <dialog
                 android:id="@+id/editorTagListFragment"
                 android:name="io.github.kosumorin.journal.feature.editor.tag.EditorTagListFragment"
                 android:label="EditorTagListFragment">
             <action
                     android:id="@+id/action_editorTagListFragment_to_editorTagCreatorFragment"
                     app:destination="@id/editorTagCreatorFragment" />
-        </fragment>
+        </dialog>
         <fragment
                 android:id="@+id/editorFragment"
                 android:name="io.github.kosumorin.journal.feature.editor.EditorFragment"
@@ -43,7 +43,7 @@
                     android:id="@+id/action_editorFragment_to_editorTagListFragment"
                     app:destination="@id/editorTagListFragment" />
         </fragment>
-        <fragment
+        <dialog
                 android:id="@+id/editorTagCreatorFragment"
                 android:name="io.github.kosumorin.journal.feature.editor.tag.EditorTagCreatorFragment"
                 android:label="EditorTagCreatorFragment" />

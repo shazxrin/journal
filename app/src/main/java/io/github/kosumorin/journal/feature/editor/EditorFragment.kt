@@ -290,9 +290,8 @@ class EditorFragment() : MainFragment() {
         markdown_toolbar.visibility = if (editorViewModel.isViewingMode) View.GONE else View.VISIBLE
 
         tags.setOnClickListener {
-            EditorTagListFragment().show(
-                childFragmentManager,
-                "TagListFragment"
+            findNavController().navigate(
+                EditorFragmentDirections.actionEditorFragmentToEditorTagListFragment()
             )
         }
     }
