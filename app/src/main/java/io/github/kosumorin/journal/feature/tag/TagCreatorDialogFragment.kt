@@ -1,4 +1,4 @@
-package io.github.kosumorin.journal.feature.editor.tag
+package io.github.kosumorin.journal.feature.tag
 
 import android.app.Dialog
 import android.os.Bundle
@@ -10,11 +10,11 @@ import androidx.navigation.navGraphViewModels
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.textfield.TextInputLayout
 import io.github.kosumorin.journal.R
-import io.github.kosumorin.journal.feature.editor.EditorViewModel
+import io.github.kosumorin.journal.data.entity.Tag
 import io.github.kosumorin.journal.ui.DialogFragment
 
-class EditorTagCreatorFragment : DialogFragment() {
-    private val editorViewModel: EditorViewModel by navGraphViewModels(R.id.editor_nav_graph) {
+class TagCreatorDialogFragment : DialogFragment() {
+    private val tagViewModel: TagViewModel by navGraphViewModels(R.id.tag_nav_graph) {
         viewModelFactory
     }
 
@@ -45,14 +45,14 @@ class EditorTagCreatorFragment : DialogFragment() {
                 return@setOnClickListener
             }
 
-            editorViewModel.tagStore.createTag(newTagName)
+            tagViewModel.createTag(Tag(newTagName, ""))
         }
 
         view.findViewById<Button>(R.id.tag_creator_neg_button)?.setOnClickListener {
             dismiss()
         }
 
-        editorViewModel.tagStore.createTagResultLiveData.consume(viewLifecycleOwner) {
+        tagViewModel.createTagResult.consume(viewLifecycleOwner) {
             if (it.isSuccess()) {
                 dismiss()
             }

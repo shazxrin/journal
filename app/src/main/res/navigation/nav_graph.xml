@@ -15,7 +15,7 @@
                 app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
                 android:id="@+id/action_timelineFragment_to_tagFragment"
-                app:destination="@id/tagFragment" />
+                app:destination="@id/tag_nav_graph" />
     </fragment>
     <navigation android:id="@+id/editor_nav_graph"
             app:startDestination="@id/editorFragment">
@@ -29,7 +29,7 @@
                 android:label="EditorTagListFragment">
             <action
                     android:id="@+id/action_editorTagListFragment_to_editorTagCreatorFragment"
-                    app:destination="@id/editorTagCreatorFragment" />
+                    app:destination="@id/editorTagCreatorDialogFragment" />
         </dialog>
         <fragment
                 android:id="@+id/editorFragment"
@@ -44,12 +44,23 @@
                     app:destination="@id/editorTagListFragment" />
         </fragment>
         <dialog
-                android:id="@+id/editorTagCreatorFragment"
-                android:name="io.github.kosumorin.journal.feature.editor.tag.EditorTagCreatorFragment"
-                android:label="EditorTagCreatorFragment" />
+                android:id="@+id/editorTagCreatorDialogFragment"
+                android:name="io.github.kosumorin.journal.feature.editor.tag.EditorTagCreatorDialogFragment"
+                android:label="EditorTagCreatorDialogFragment" />
     </navigation>
-    <fragment
-            android:id="@+id/tagFragment"
-            android:name="io.github.kosumorin.journal.feature.tag.TagFragment"
-            android:label="TagFragment" />
+    <navigation android:id="@+id/tag_nav_graph"
+            app:startDestination="@id/tagFragment">
+        <fragment
+                android:id="@+id/tagFragment"
+                android:name="io.github.kosumorin.journal.feature.tag.TagFragment"
+                android:label="TagFragment">
+            <action
+                    android:id="@+id/action_tagFragment_to_tagCreatorDialogFragment"
+                    app:destination="@id/tagCreatorDialogFragment" />
+        </fragment>
+        <dialog
+                android:id="@+id/tagCreatorDialogFragment"
+                android:name="io.github.kosumorin.journal.feature.tag.TagCreatorDialogFragment"
+                android:label="TagCreatorDialogFragment" />
+    </navigation>
 </navigation>

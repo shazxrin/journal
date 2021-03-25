@@ -19,7 +19,7 @@
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="editorScreenFragment">
+                            <entry key="editorFragment">
                               <value>
                                 <LayoutPositions>
                                   <option name="myPosition">
@@ -30,7 +30,7 @@
                                   </option>
                                   <option name="myPositions">
                                     <map>
-                                      <entry key="action_editorScreenFragment_to_editorTagListFragment">
+                                      <entry key="action_editorFragment_to_editorTagListFragment">
                                         <value>
                                           <LayoutPositions />
                                         </value>
@@ -78,29 +78,71 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="tagFragment">
+                  <entry key="tag_nav_graph">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="-40" />
-                            <option name="y" value="-362" />
-                          </Point>
-                        </option>
-                      </LayoutPositions>
-                    </value>
-                  </entry>
-                  <entry key="timelineScreenFragment">
-                    <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="-240" />
-                            <option name="y" value="5" />
+                            <option name="x" value="12" />
+                            <option name="y" value="12" />
                           </Point>
                         </option>
                         <option name="myPositions">
                           <map>
+                            <entry key="tagCreatorDialogFragment">
+                              <value>
+                                <LayoutPositions>
+                                  <option name="myPosition">
+                                    <Point>
+                                      <option name="x" value="256" />
+                                      <option name="y" value="12" />
+                                    </Point>
+                                  </option>
+                                </LayoutPositions>
+                              </value>
+                            </entry>
+                            <entry key="tagFragment">
+                              <value>
+                                <LayoutPositions>
+                                  <option name="myPosition">
+                                    <Point>
+                                      <option name="x" value="12" />
+                                      <option name="y" value="12" />
+                                    </Point>
+                                  </option>
+                                  <option name="myPositions">
+                                    <map>
+                                      <entry key="action_tagFragment_to_tagCreatorDialogFragment">
+                                        <value>
+                                          <LayoutPositions />
+                                        </value>
+                                      </entry>
+                                    </map>
+                                  </option>
+                                </LayoutPositions>
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="timelineFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="12" />
+                            <option name="y" value="12" />
+                          </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_timelineFragment_to_tagFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                             <entry key="timeline_open_editor_action">
                               <value>
                                 <LayoutPositions />

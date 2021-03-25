@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import io.github.kosumorin.journal.R
@@ -38,6 +40,7 @@ class TagFragment() : MainFragment() {
 
         setupBottomAppBar()
 
+        // Setup recycler view.
         val recyclerView = view.findViewById<RecyclerView>(R.id.tag_list_recycler_view)
         tagListAdapter.onTagItemSaveClickedHandler = { newTag: Tag -> tagViewModel.updateTag(newTag) }
         tagListAdapter.onTagItemDeleteClickedHandler = { tag: Tag -> tagViewModel.deleteTag(tag) }
@@ -46,6 +49,11 @@ class TagFragment() : MainFragment() {
 
         tagViewModel.tags.observe(viewLifecycleOwner) {
             tagListAdapter.submitList(it)
+        }
+
+        // Setup new tag button.
+        view.findViewById<Button>(R.id.tag_list_create_button).setOnClickListener {
+            findNavController().navigate(R.id.action_tagFragment_to_tagCreatorDialogFragment)
         }
     }
 

@@ -6,8 +6,9 @@ import io.github.kosumorin.journal.ui.alert.AlertFragment
 import io.github.kosumorin.journal.ui.datetime.DatePickerDialogFragment
 import io.github.kosumorin.journal.ui.datetime.TimePickerDialogFragment
 import io.github.kosumorin.journal.feature.editor.EditorFragment
-import io.github.kosumorin.journal.feature.editor.tag.EditorTagCreatorFragment
+import io.github.kosumorin.journal.feature.editor.tag.EditorTagCreatorDialogFragment
 import io.github.kosumorin.journal.feature.editor.tag.EditorTagListFragment
+import io.github.kosumorin.journal.feature.tag.TagCreatorDialogFragment
 import io.github.kosumorin.journal.feature.tag.TagFragment
 import io.github.kosumorin.journal.feature.timeline.TimelineFragment
 
@@ -29,11 +30,14 @@ abstract class FragmentBuildersModule {
     abstract fun contributesAlertFragment(): AlertFragment
 
     @ContributesAndroidInjector
-    abstract fun contributesTagListFragment(): EditorTagListFragment
+    abstract fun contributesEditorTagListFragment(): EditorTagListFragment
 
     @ContributesAndroidInjector
-    abstract fun contributesTagCreatorFragment(): EditorTagCreatorFragment
+    abstract fun contributesEditorTagCreatorDialogFragment(): EditorTagCreatorDialogFragment
 
     @ContributesAndroidInjector
     abstract fun contributesTagFragment(): TagFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributesTagCreatorDialogFragment() : TagCreatorDialogFragment
 }
