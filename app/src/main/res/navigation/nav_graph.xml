@@ -4,7 +4,7 @@
             android:id="@+id/nav_graph" app:startDestination="@id/timelineScreenFragment">
 
     <fragment android:id="@+id/timelineScreenFragment"
-              android:name="io.github.icedshytea.journal.feature.timeline.TimelineFragment"
+              android:name="io.github.shazxrin.journal.feature.timeline.TimelineFragment"
               android:label="TimelineScreenFragment">
         <action
                 app:destination="@id/editorScreenFragment" app:enterAnim="@anim/nav_default_enter_anim"
@@ -12,7 +12,7 @@
                 app:popExitAnim="@anim/nav_default_pop_exit_anim" android:id="@+id/timeline_open_editor_action"/>
     </fragment>
     <fragment android:id="@+id/editorScreenFragment"
-              android:name="io.github.icedshytea.journal.feature.editor.EditorFragment"
+              android:name="io.github.shazxrin.journal.feature.editor.EditorFragment"
               android:label="EditorScreenFragment">
         <argument android:name="entryId" app:argType="integer" android:defaultValue="-1"/>
     </fragment>
